@@ -45,9 +45,39 @@ class Start:
         self.Timer_button.grid(row=4, sticky="ew")
 
         # Instructions button
-        self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5)
+        self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5,
+                                            command=lambda: self.to_help())
         self.instructions_button.grid(row=5, pady=20)
 
+    def to_help(self):
+        Help()
+
+
+class Help:
+    def __init__(self):
+        # Create new window
+        box = Toplevel()
+
+        # Help frame
+        self.help_frame = Frame(box, padx=10, pady=10)
+        self.help_frame.grid()
+
+        # Header label (row 0)
+        self.header_label = Label(self.help_frame, font='arial 16', text="Help / Instructions")
+        self.header_label.grid(row=0, pady=5)
+
+        # Help text label (row 1)
+        self.help_label = Label(self.help_frame, font='arial 12', text="Help text goes here...")
+        self.help_label.grid(row=1)
+
+        # Dismiss button (row 2)
+        self.dismiss_button = Button(self.help_frame, font='arial 12', text="Dismiss",
+                                    command=lambda: self.close_help())
+        self.dismiss_button.grid(row=2)
+
+    def close_help(self):
+        print("working")
+        #self.instructions_button.config(state=NORMAL)
 
 
 

@@ -45,10 +45,17 @@ class Start:
         self.Timer_button.grid(row=4, sticky="ew")
 
         # Instructions button
-        self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5, bg="grey24", fg="white")
+        self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5, bg="grey24", fg="white",
+                                            command=lambda: self.to_help())
         self.instructions_button.grid(row=5, pady=20)
 
+        def to_help(self):
+            Help()
 
+
+class Help:
+    def __init__(self):
+        print("Working")
 
 
 # Main Routine
