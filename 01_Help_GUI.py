@@ -46,15 +46,17 @@ class Start:
 
         # Instructions button
         self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5,
-                                            command=lambda: self.to_help())
+                                            command=self.to_help)
         self.instructions_button.grid(row=5, pady=20)
 
     def to_help(self):
-        Help()
+        self.instructions_button.config(state=DISABLED)
+        Help(self)
+        
 
 
 class Help:
-    def __init__(self):
+    def __init__(self, partner):
         # Create new window
         box = Toplevel()
 
@@ -72,12 +74,12 @@ class Help:
 
         # Dismiss button (row 2)
         self.dismiss_button = Button(self.help_frame, font='arial 12', text="Dismiss",
-                                    command=lambda: self.close_help())
-        self.dismiss_button.grid(row=2)
+                                    command=lambda: self.close_help(partner))
+        self.dismiss_button.grid(row=2, pady=5)
 
-    def close_help(self):
-        print("working")
-        #self.instructions_button.config(state=NORMAL)
+    def close_help(self, partner):
+        partner.instructions_button.config(state=NORMAL)
+        partner.box.destroy()
 
 
 
