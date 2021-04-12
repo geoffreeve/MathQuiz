@@ -68,12 +68,12 @@ class Help:
 
         # Help text label (row 1)
         self.help_label = Label(self.help_frame, font='arial 12', text="Help text goes here...")
-        self.help_label.grid(row=1)
+        self.help_label.grid(row=1, pady=5)
 
         # Dismiss button (row 2)
         self.dismiss_button = Button(self.help_frame, font='arial 12', text="Dismiss",
                                     command=lambda: self.close_help())
-        self.dismiss_button.grid(row=2)
+        self.dismiss_button.grid(row=2, pady=5)
 
     def close_help(self):
         print("working")
