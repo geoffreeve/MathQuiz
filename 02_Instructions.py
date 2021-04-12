@@ -74,11 +74,7 @@ class Help:
 
         # Dismiss button (row 2)
         self.dismiss_button = Button(self.help_frame, font='arial 12', text="Dismiss",
-<<<<<<< HEAD:02_Instructions.py
-                                    command=lambda: self.close_help())
-=======
                                     command=lambda: self.close_help(partner))
->>>>>>> 1d68fabf565bb0e1f4e812bdd50729ccc6d2bd23:01_Help_GUI.py
         self.dismiss_button.grid(row=2, pady=5)
 
     def close_help(self, partner):
