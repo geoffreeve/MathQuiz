@@ -1,4 +1,5 @@
 from tkinter import *
+from functools import partial  # To prevent unwanted windows
 
 
 class Start:
@@ -58,10 +59,10 @@ class Start:
 class Help:
     def __init__(self, partner):
         # Create new window
-        box = Toplevel()
+        self.box = Toplevel()
 
         # Help frame
-        self.help_frame = Frame(box, padx=10, pady=10)
+        self.help_frame = Frame(self.box, padx=10, pady=10)
         self.help_frame.grid()
 
         # Header label (row 0)
@@ -74,12 +75,12 @@ class Help:
 
         # Dismiss button (row 2)
         self.dismiss_button = Button(self.help_frame, font='arial 12', text="Dismiss",
-                                    command=lambda: self.close_help(partner))
+                                    command=partial(self.close_help, partner))
         self.dismiss_button.grid(row=2, pady=5)
 
     def close_help(self, partner):
         partner.instructions_button.config(state=NORMAL)
-        partner.box.destroy()
+        self.box.destroy()
 
 
 
