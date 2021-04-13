@@ -57,9 +57,14 @@ class Start:
 
 
 class Help:
+
+    # set up help GUI, has heading, text and dismiss button
     def __init__(self, partner):
         # Create new window
         self.box = Toplevel()
+
+        # If user presses x, closes help window and re-enables instruction button
+        self.box.protocol('WM_DELETE_WINDOW', partial(self.close_help, partner))
 
         # Help frame
         self.help_frame = Frame(self.box, padx=10, pady=10)
@@ -77,7 +82,9 @@ class Help:
         self.dismiss_button = Button(self.help_frame, font='arial 12', text="Dismiss",
                                     command=partial(self.close_help, partner))
         self.dismiss_button.grid(row=2, pady=5)
+        
 
+    # closes help and re-enables help button in 
     def close_help(self, partner):
         partner.instructions_button.config(state=NORMAL)
         self.box.destroy()
