@@ -24,8 +24,8 @@ def generate(symbol, min, max):
         answer = num_A / num_B
 
     # This print statement takes the first generated number, the symbol from the symbol list, and last generated number.
-    user_answer = int(input("{} {} {} = ".format(num_A, symbol_list[symbol], num_B))
-
+    user_answer = int(input("{} {} {} = ".format(num_A, symbol_list[symbol-1], num_B)))
+    
     # Checks if users answer matches programs answer, if it does then it prints correct.
     if user_answer == answer:
         print("Correct!")
@@ -34,12 +34,25 @@ def generate(symbol, min, max):
 
 
 # Main routine
-try:
-    # Asks user for 
-    symbol = int(input("1.+ 2.- 3.* 4./  "))
-    min_num = int(input("Enter minimum number: "))
-    max_num = int(input("Enter maximum number: "))
-    generate(select, min_num, max_num)
+while True:
+    try:
+        # Ask user to select a symbol
+        symbol = int(input("1.+ 2.- 3.* 4./  "))
+        # If the user enters a number lower than 0 or higher than 4, it will print an error and ask the user to try again
+        if symbol <= 0 or symbol >= 5:
+            print("Please enter a number between 1-4.")
+            continue
+        # If the user enters 0 or lower, it prints a error and asks the user to try again
+        min_num = int(input("Enter minimum number: "))
+        if min_num <= 0:
+            print("Please enter a number higher than 0.")
+            continue
+        # If the user enters a number lower than the minimum number, it will print an error and ask the user to try again.
+        max_num = int(input("Enter maximum number: "))
+        if max_num >= min_num:
+            print("Please enter a number higher than min num. Min num: {}".format(min_num))
+            continue
+        generate(symbol, min_num, max_num)
 
-except ValueError:
-    raise
+    except ValueError:
+        print("Please enter a number")
