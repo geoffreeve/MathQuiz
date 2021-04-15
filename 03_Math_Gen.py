@@ -1,6 +1,6 @@
 import random
 
-
+# This function takes the symbol selected, min num and max num to generate a question that suits the users needs.
 def generate(symbol, min, max):
     # Generates numbers between the min and max numbers inputted by user
     num_A = random.randint(min, max)
@@ -32,27 +32,25 @@ def generate(symbol, min, max):
     else:
         print("Incorrect")
 
+# Error prevention function, checks if user input is valid.
+def number_checker(question, min, max, error):
+    while True:
+        try:
+            response = int(input(question))
+            if response < min or response >= max:
+                print(error)
+                continue
+            else:
+                return response
+                break
+        except ValueError:
+            print(error)
+            continue
+            
 
 # Main routine
-while True:
-    try:
-        # Ask user to select a symbol
-        symbol = int(input("1.+ 2.- 3.* 4./  "))
-        # If the user enters a number lower than 0 or higher than 4, it will print an error and ask the user to try again
-        if symbol <= 0 or symbol >= 5:
-            print("Please enter a number between 1-4.")
-            continue
-        # If the user enters 0 or lower, it prints a error and asks the user to try again
-        min_num = int(input("Enter minimum number: "))
-        if min_num <= 0:
-            print("Please enter a number higher than 0.")
-            continue
-        # If the user enters a number lower than the minimum number, it will print an error and ask the user to try again.
-        max_num = int(input("Enter maximum number: "))
-        if max_num >= min_num:
-            print("Please enter a number higher than min num. Min num: {}".format(min_num))
-            continue
-        generate(symbol, min_num, max_num)
-
-    except ValueError:
-        print("Please enter a number")
+# Ask user to select a symbol
+symbol = number_checker("1.+ 2.- 3.* 4./  ", 1, 4, "Please enter a number between 1 and 4.")
+min_num = number_checker("Enter minimum number: ", 1, 100000, "Please enter any number higher than 0")
+max_num = number_checker("Enter maximum number: ", min_num, 100000, "Please enter a number higher than {}".format(min_num))
+generate(symbol, min_num, max_num)
