@@ -55,7 +55,6 @@ class Start:
         Help(self)
         
 
-
 class Help:
 
     # set up help GUI, has heading, text and dismiss button
