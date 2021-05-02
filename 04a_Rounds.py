@@ -68,7 +68,7 @@ min_num = number_checker("Enter minimum number: ", 1, 100000, "Please enter any 
 max_num = number_checker("Enter maximum number: ", min_num, 100000, "Please enter a number higher than {}".format(min_num))
 
 # Asks user how many rounds they want
-rounds = number_checker("How many rounds: ", 1, 100000, "Please enter a number higher than 0")
+rounds = number_checker("How many rounds: ", 1, 100000, "Please enter a valid integer higher than 0")
 while rounds > 0:
     # Calls generate function to generate a equation with the given values (symbol, min-max number range).
     generate(symbol, min_num, max_num, rounds)
