@@ -1,6 +1,6 @@
 from tkinter import *
 
-
+# Start window, This class runs when the program starts.
 class Start:
     def __init__(self):
         # Heading frame
