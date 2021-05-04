@@ -1,6 +1,6 @@
 import random
 
-
+# This class is used to store functions related to asking the user questions related to their question preferences and settings.
 class Math:
     # This function takes the symbol selected, min num and max num to generate a question that suits the users needs.
     def generate(symbol, min, max, rounds):
@@ -56,6 +56,8 @@ class Math:
                 print(error)
                 continue     
 
+    # This function holds variables that will be used to ask the user questions. 
+    # It calls other functions to check if it is valid and to generate numbers.
     def selection():
         # Ask user to select a symbol
         symbol = Math.number_checker("1.+ 2.- 3.* 4./  ", 1, 4, "Please enter a valid number.")
@@ -73,6 +75,7 @@ class Math:
             Math.generate(symbol, min_num, max_num, rounds)
             rounds -= 1
         print("GameOver")
+
 
 
     

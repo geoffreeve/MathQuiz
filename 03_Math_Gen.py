@@ -1,68 +1,70 @@
-import random
+from tkinter import *
 
-class Math:
-    # This function takes the symbol selected, min num and max num to generate a question that suits the users needs.
-    def generate(symbol, min, max):
-        # Generates numbers between the min and max numbers inputted by user
-        num_A = random.randint(min, max)
-        num_B = random.randint(min, max)
+# Start window, This class runs when the program starts.
+class Start:
+    def __init__(self):
+        # Heading frame
+        self.start_frame = Frame(padx=30, pady=15)
+        self.start_frame.grid()
 
-        # This symbol list is used in the question print statement later so that i don't have to
-        # Repeat print statements for different symbols
-        symbol_list = ["+", "-", "*", "/"]
+        # Heading label (row 0)
+        self.heading_label = Label(self.start_frame, font='arial 24', text="Math quiz")
+        self.heading_label.grid(row=0)
 
-        # Creates answer for Addition
-        if symbol == 1:
-            answer = num_A + num_B
-        # Creates answer for Subtraction
-        if symbol == 2:
-            answer = num_A - num_B
-        # Creates answer for Multiplication
-        if symbol == 3:
-            answer = num_A * num_B
-        # Creates answer for Division
-        if symbol == 4:
-            answer = num_A / num_B
+        # Min frames
+        self.min_max_frame = Frame(padx=10)
+        self.min_max_frame.grid()
+        # Min label (row 1, column 0)
+        self.min_label = Label(self.min_max_frame, font='arial 12', text="Min number", justify=LEFT)
+        self.min_label.grid(row=1, column=0)
+        # Min slider (row 1, column 1)
+        self.min_slider = Scale(self.min_max_frame, from_=1, to=50, orient=HORIZONTAL, length=150)
+        self.min_slider.grid(row=1, column=1)
 
-        # This print statement takes the first generated number, the symbol from the symbol list, and last generated number.
-        user_answer = Math.number_checker("{} {} {} = ".format(num_A, symbol_list[symbol-1], num_B), 0, 100000, "Please enter a valid number.")
-        
-        # Checks if users answer matches programs answer, if it does then it prints correct.
-        if user_answer == answer:
-            print("Correct!")
-        else:
-            print("Incorrect")
+        # Max label (row 2, column 0)
+        self.max_label = Label(self.min_max_frame, font='arial 12', text="Max number", justify=LEFT)
+        self.max_label.grid(row=2, column=0)
+        # Max slider (row 2, column 1)
+        self.min_slider = Scale(self.min_max_frame, from_=1, to=100, orient=HORIZONTAL, length=150)
+        self.min_slider.grid(row=2, column=1)
 
-                
-    # Error prevention function, checks if user input is valid.
-    def number_checker(question, min, max, error):
-        while True:
-            try:
-                response = (input(question))
-                # If the user enters xx, the program will exit.
-                if response == "xx":
-                    exit()
-                # Checks if the user has entered a response that is both higher than min and lower than max.
-                elif int(response) < min or int(response) > max:
-                    print(error)
-                    continue
-                # If the response is valid it will be returned
-                else:
-                    return int(response)
-            # If the user enters anything invalid that hasn't been covered by if statements, it will be caught here with a error printed.
-            except ValueError:
-                print(error)
-                continue
+        # Modes frame
+        self.mode_frame = Frame(padx=5, pady=5)
+        self.mode_frame.grid()
+        # Mode label (row 1)
+        self.mode_label = Label(self.mode_frame, font='arial 16 bold', text="Modes:")
+        self.mode_label.grid(row=1, pady=10)
+        # Rounds button (row 2)
+        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Rounds())
+        self.rounds_button.grid(row=2, sticky="ew")
+        # Unlimited button (row 3)
+        self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10)
+        self.unlimited_button.grid(row=3, pady=5, sticky="ew")
+        # Rounds button (row 4)
+        self.Timer_button = Button(self.mode_frame, font='arial 12 bold', text="Timer", padx=10)
+        self.Timer_button.grid(row=4, sticky="ew")
+
+        # Instructions button
+        self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5)
+        self.instructions_button.grid(row=5, pady=20)
 
 
-# Main routine
-# Short instructions
-print("***Enter 'xx' to exit the program at any time.***")
-# Ask user to select a symbol
-symbol = Math.number_checker("1.+ 2.- 3.* 4./  ", 1, 4, "Please enter a valid number.")
-# Ask user to input min range number
-min_num = Math.number_checker("Enter minimum number: ", 1, 100000, "Please enter any number higher than 0")
-# Ask user to input max range number
-max_num = Math.number_checker("Enter maximum number: ", min_num, 100000, "Please enter a number higher than {}".format(min_num))
-# Calls generate function to generate a equation with the given values (symbol, min-max number range).
-Math.generate(symbol, min_num, max_num)
+class Rounds:
+    def __init__(self):
+
+        self.rounds_box = Toplevel()
+        # Heading frame
+        self.start_round_frame = Frame(padx=30, pady=15)
+        self.start_round_frame.grid()
+
+        # Heading label (row 0)
+        self.r_heading_label = Label(self.start_round_frame, font='arial 24', text="Math quiz")
+        self.r_heading_label.grid(row=0)
+
+
+# Main Routine
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Math Program")
+    something = Start()
+    root.mainloop()
