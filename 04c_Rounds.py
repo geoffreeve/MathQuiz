@@ -73,7 +73,7 @@ class Selection():
         self.buttons_frame.grid(padx=15, pady=15)
 
         # Addition button (row 1, column 0)
-        self.addition_button = Button(self.buttons_frame, text="+", font='arial 12', width=3, command=lambda:Rounds(), selection)
+        self.addition_button = Button(self.buttons_frame, text="+", font='arial 12', width=3, command=lambda:Rounds())
         self.addition_button.grid(row=1, column=0)
 
         # Subtraction button (row 1, column 1)
