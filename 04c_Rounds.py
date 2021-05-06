@@ -104,6 +104,9 @@ class Rounds:
         # Creates new window called rounds_box
         self.rounds_box = Toplevel()
 
+        # This 
+        self.rounds_box.protocol('WM_DELETE_WINDOW', self.close_rounds)
+
         # Main window frame
         self.rounds_frame = Frame(self.rounds_box, padx=20, pady=5)
         self.rounds_frame.grid()
@@ -130,6 +133,11 @@ class Rounds:
         # Enter button (row 3, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12')
         self.enter_button.grid(row=3, column=1)
+
+    def close_rounds():
+        Rounds.rounds_box.destroy()
+
+        
 
 
 # Main routine
