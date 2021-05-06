@@ -1,9 +1,9 @@
 from tkinter import *
-
-# User selects 1 of 3 options rounds, timer, unlimited. When the button is pressed, a number will pass through a function which is a while loop, checking
-# Which mode the user selected. This will then call the class for the given mode.
+from functools import partial
 
 # This class runs when the program starts and is the main window.
+# User selects 1 of 3 options rounds, timer, unlimited. When the button is pressed, a number will pass through a function which is a while loop, checking
+# Which mode the user selected. This will then call the class for the given mode.
 class Start:
     def __init__(self):
         # Heading frame
@@ -38,7 +38,8 @@ class Start:
         self.mode_label = Label(self.mode_frame, font='arial 16 bold', text="Modes:")
         self.mode_label.grid(row=1, pady=10)
         # Rounds button (row 2)
-        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Selection())
+        # If rounds button is pressed, it calls the mode_select function and checks which button the user pressed, e.g, rounds, unlimited, timer.
+        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Selection.__init__(self, 1))
         self.rounds_button.grid(row=2, sticky="ew")
         # Unlimited button (row 3)
         self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10)
@@ -58,7 +59,7 @@ class Start:
 
 
 class Selection():
-    def __init__(self):
+    def __init__(self, mode):
         self.selection_box = Toplevel()
         # Main window frame
         self.selection_frame = Frame(self.selection_box)
@@ -73,7 +74,7 @@ class Selection():
         self.buttons_frame.grid(padx=15, pady=15)
 
         # Addition button (row 1, column 0)
-        self.addition_button = Button(self.buttons_frame, text="+", font='arial 12', width=3, command=lambda:Rounds())
+        self.addition_button = Button(self.buttons_frame, text="+", font='arial 12', width=3, command=lambda:Selection.mode_select(self, mode))
         self.addition_button.grid(row=1, column=0)
 
         # Subtraction button (row 1, column 1)
@@ -88,6 +89,13 @@ class Selection():
         self.division_button = Button(self.buttons_frame, text='/', font='arial 12', width=3)
         self.division_button.grid(row=1, column=3)
 
+        # This function is used to check which mode button the user pressed (rounds, unlimited, timer)
+    def mode_select(self, mode):
+        # if mode == 1, it's rounds.
+        if mode == 1:
+            # The variable pass through is to tell the function which mode the user selected.
+            #Selection.__init__.selection_box.withdraw()
+            Rounds()
 
 
 # Rounds class
@@ -99,7 +107,7 @@ class Rounds:
         # Main window frame
         self.rounds_frame = Frame(self.rounds_box, padx=20, pady=5)
         self.rounds_frame.grid()
-
+        
         # Heading label (row 0)
         self.heading_label = Label(self.rounds_frame, text="Rounds", font='arial 30 bold')
         self.heading_label.grid(padx=10, pady=10)
@@ -117,14 +125,11 @@ class Rounds:
         self.buttons_frame.grid()
 
         # Back button (row 3, column 0)
-        self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='grey', font='arial 12')
+        self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='black', font='arial 12')
         self.back_button.grid(row=3, pady=10, padx=5)
         # Enter button (row 3, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='grey', font='arial 12')
+        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12')
         self.enter_button.grid(row=3, column=1)
-
-
-
 
 
 # Main routine
