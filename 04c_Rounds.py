@@ -58,7 +58,7 @@ class Start:
         #Help(self)
 
 
-class Selection():
+class Selection:
     def __init__(self, mode):
         self.selection_box = Toplevel()
         # Main window frame
@@ -94,8 +94,8 @@ class Selection():
         # if mode == 1, it's rounds.
         if mode == 1:
             # The variable pass through is to tell the function which mode the user selected.
-            #Selection.__init__.selection_box.withdraw()
             Rounds()
+            self.selection_box.withdraw()
 
 
 # Rounds class
