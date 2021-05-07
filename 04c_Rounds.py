@@ -134,8 +134,9 @@ class Rounds:
         self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12')
         self.enter_button.grid(row=3, column=1)
 
-    def close_rounds():
-        Rounds.rounds_box.destroy()
+    def close_rounds(self):
+        self.rounds_box.destroy()
+        Selection(1)
 
         
 
