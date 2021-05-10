@@ -67,8 +67,7 @@ class Start:
         self.mode_label = Label(self.mode_frame, font='arial 16 bold', text="Modes:")
         self.mode_label.grid(row=2, pady=10)
         # Rounds button (row 3)
-        print(self.min_entry.get())
-        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Start.error_checking(self, self.min_entry.get(), self.max_entry.get()))
+        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Start.error_checking(self, self.min_entry.get(), self.max_entry.get(), 1))
         self.rounds_button.grid(row=3, sticky="ew")
         # Unlimited button (row 4)
         self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10)
@@ -82,43 +81,28 @@ class Start:
         self.instructions_button.grid(row=6, pady=20)
 
     # This function is to check if the users entries (min/max num) are valid before going through with modes.
-    def error_checking(self, min, max):
+    def error_checking(self, min, max, mode):
         try:
-            # If min is blank, then user will be given an error,
-            # Otherwise it will continue to check if there are any strings.
-            if str(min) == "":
-                self.error_label.config(text="Min entry is blank. Please enter a valid number.")
-            # Elif max is blank, then user will be given an error
-            elif str(max) == "":
-                self.error_label.config(text="Max entry is blank. Please enter a valid number")
-                
-            # Check if 'min' has any strings. If it does, then print an error.
-            # When the second 'for loop' is done checking 'min', the first loop then changes 
-            # from 'min' to 'max' for the second 'for loop' to check.
-            num_list = [str(min, max)]
-            valid_num = "[0-9]"
-            # If these loops are finished, and nothing is found, then there is no string and the user has entered a valid response.
-            for i in num_list:
-                for letter in num_list[i-1]:
-                    # If there are no strings, then it will continue to check the next item in the 'num_list'
-                    if re.match(valid_num, letter):
-                        continue
-                    # If num is a string at any point, the user will be given a string error.
-                    else:
-                        self.error_label.config("Please enter a valid number.")
-
-
-            # If min num is higher than max num, then the user will be given an error.
-            if self.min > self.max:
-                Start.__init__(self, "Minimum number can't be higher than maximum number.")
+            # Checks if the entry is blank. If it is, the user will get an error.
+            if min == "" or max == "":
+                self.error_label.config(text="One or more entries are blank.")
+                return
+            # If min or max is a string, it will attempt to change to a int. This will be caught by the try except and will print an error.
+            min = int(min)
+            max = int(max)
+            # Checks if minimum number is higher than max number. If it is then user will get an error.
+            if min > max:
+                self.error_label.config(text="Min is higher than max, please enter a lower number")
+                return
+            # If there are no problems, the error label will reset and the program will proceed.
             else:
-                # (For testing) If everything is good, then 'working' will be printed and nothing should change.
-                print("Working")
-                Start.__init__(self, "")
+                self.error_label.config(text="")
+                # If mode is 1, then the rounds class will be called.
+                if mode == 1:
+                    Rounds()
 
-        # If there is an error that cannot be specified, then the user will get a value error.
         except ValueError:
-            print("!!!!Something happened.!!!!")
+            self.error_label.config(text="Please enter a valid number.")
         
         
 
