@@ -1,5 +1,6 @@
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
+import re
 
 
 class Start:
@@ -12,30 +13,31 @@ class Start:
         self.heading_label = Label(self.start_frame, font='arial 24', text="Math quiz")
         self.heading_label.grid(row=0)
 
-        # Hidden error label (row 0, Under heading label)
+        # Hidden error label (row 0, Under Heading label)
         self.error_label = Label(self.start_frame, text="", font='arial 12', fg='red', wraplength=150)
         self.error_label.grid()
 
-        # If error variable has changed, then change the error label to the given error message.
+        # If error variable has changed, then there is an error.
+        # This will change the error label from blank and print the error.
         if error != "":
             self.error_label.configure(text=error)
 
-        # Min frames
+        # Min/Max frames
         self.min_max_frame = Frame(padx=10)
         self.min_max_frame.grid()
         # Min label (row 1, column 0)
         self.min_label = Label(self.min_max_frame, font='arial 12', text="Min number", justify=LEFT)
         self.min_label.grid(row=1, column=0)
-        # Min slider (row 1, column 1)
-        self.min_entry = Entry(self.min_max_frame, width=4, font='arial 14', )
+        # Min Entry (row 1, column 1)
+        self.min_entry = Entry(self.min_max_frame, width=4, font='arial 14')
         self.min_entry.grid(row=1, column=1)
 
         # Max label (row 2, column 0)
         self.max_label = Label(self.min_max_frame, font='arial 12', text="Max number", justify=LEFT)
         self.max_label.grid(row=2, column=0, pady=10, padx=10)
-        # Max slider (row 2, column 1)
-        self.min_entry = Entry(self.min_max_frame, font='arial 14', width=4)
-        self.min_entry.grid(row=2, column=1)
+        # Max Entry (row 2, column 1)
+        self.max_entry = Entry(self.min_max_frame, font='arial 14', width=4)
+        self.max_entry.grid(row=2, column=1)
 
         # Radio button frame
         self.radio_frame = Frame()
@@ -65,7 +67,8 @@ class Start:
         self.mode_label = Label(self.mode_frame, font='arial 16 bold', text="Modes:")
         self.mode_label.grid(row=2, pady=10)
         # Rounds button (row 3)
-        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Start.error_checking(self, min_entry.get(), max_entry.get()))
+        print(self.min_entry.get())
+        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Start.error_checking(self, self.min_entry.get(), self.max_entry.get()))
         self.rounds_button.grid(row=3, sticky="ew")
         # Unlimited button (row 4)
         self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10)
@@ -81,22 +84,41 @@ class Start:
     # This function is to check if the users entries (min/max num) are valid before going through with modes.
     def error_checking(self, min, max):
         try:
-            # Check if min has any strings.
-            for i in self.min:
-                if i == str:
-                    # If it does, then user will  be given an error.
-                    Start.__init__(self, "Please enter a valid number.")
-                else:
-                    continue
+            # If min is blank, then user will be given an error,
+            # Otherwise it will continue to check if there are any strings.
+            if str(min) == "":
+                self.error_label.config(text="Min entry is blank. Please enter a valid number.")
+            # Elif max is blank, then user will be given an error
+            elif str(max) == "":
+                self.error_label.config(text="Max entry is blank. Please enter a valid number")
+                
+            # Check if 'min' has any strings. If it does, then print an error.
+            # When the second 'for loop' is done checking 'min', the first loop then changes 
+            # from 'min' to 'max' for the second 'for loop' to check.
+            num_list = [str(min, max)]
+            valid_num = "[0-9]"
+            # If these loops are finished, and nothing is found, then there is no string and the user has entered a valid response.
+            for i in num_list:
+                for letter in num_list[i-1]:
+                    # If there are no strings, then it will continue to check the next item in the 'num_list'
+                    if re.match(valid_num, letter):
+                        continue
+                    # If num is a string at any point, the user will be given a string error.
+                    else:
+                        self.error_label.config("Please enter a valid number.")
+
+
             # If min num is higher than max num, then the user will be given an error.
             if self.min > self.max:
                 Start.__init__(self, "Minimum number can't be higher than maximum number.")
             else:
+                # (For testing) If everything is good, then 'working' will be printed and nothing should change.
                 print("Working")
                 Start.__init__(self, "")
+
         # If there is an error that cannot be specified, then the user will get a value error.
         except ValueError:
-            print("!!!!!!!Something happened.!!!!!!")
+            print("!!!!Something happened.!!!!")
         
         
 
