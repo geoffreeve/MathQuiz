@@ -2,7 +2,7 @@ from tkinter import *
 from functools import partial  # To prevent unwanted windows
 import re
 
-
+# This is the main GUI where the user selects their preferences and mode.
 class Start:
     def __init__(self, error=""):
         # Heading frame
@@ -43,7 +43,7 @@ class Start:
         self.radio_frame = Frame()
         self.radio_frame.grid()        
 
-        # This variable changes depending on what radiobutton the user presses. These buttons are below.
+        # This variable is linked to the radiobuttons and will change depending on which button the user selects.
         self.symbol_selection = IntVar()
 
         # Radio buttons
@@ -59,6 +59,8 @@ class Start:
         # Division button (row 1, column 3)
         self.division_radio_button = Radiobutton(self.radio_frame, text="/", font='arial 12 bold', variable=self.symbol_selection, value=4)
         self.division_radio_button.grid(row=1, column=3)
+
+        
 
         # Modes frame
         self.mode_frame = Frame(padx=5, pady=5)
@@ -94,6 +96,9 @@ class Start:
             if min > max:
                 self.error_label.config(text="Min is higher than max, please enter a lower number")
                 return
+            # Checks if user has selected a radiobutton symbol, if not then the user will get an error.
+            if self.symbol_selection.get() == 0:
+                self.error_label.config(text="Please select a symbol.")
             # If there are no problems, the error label will reset and the program will proceed.
             else:
                 self.error_label.config(text="")
@@ -105,7 +110,7 @@ class Start:
             self.error_label.config(text="Please enter a valid number.")
         
         
-
+# This is the rounds class which holds the rounds GUI if the user selects 'Rounds' in Start class
 class Rounds:
     def __init__(self):
         # Creates new window called rounds_box
@@ -146,6 +151,11 @@ class Rounds:
         # Enter button (row 3, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12')
         self.enter_button.grid(row=3, column=1)
+
+
+class Math:
+    def __init__(self):
+        print("math class")
 
 # Main Routine
 if __name__ == "__main__":
