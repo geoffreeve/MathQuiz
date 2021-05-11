@@ -1,6 +1,5 @@
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
-import re
 
 # This is the main GUI where the user selects their preferences and mode.
 class Start:
@@ -146,16 +145,19 @@ class Rounds:
         self.buttons_frame.grid()
 
         # Back button (row 3, column 0)
-        self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='black', font='arial 12')
+        self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_quit())
         self.back_button.grid(row=3, pady=10, padx=5)
         # Enter button (row 3, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12')
         self.enter_button.grid(row=3, column=1)
 
+    def rounds_quit(self):
+        self.rounds_box.destroy()
+
 
 class Math:
     def __init__(self):
-        print("math class")
+         print("")
 
 # Main Routine
 if __name__ == "__main__":
