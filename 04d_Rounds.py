@@ -148,16 +148,64 @@ class Rounds:
         self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_quit())
         self.back_button.grid(row=3, pady=10, padx=5)
         # Enter button (row 3, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12')
+        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_go())
         self.enter_button.grid(row=3, column=1)
 
     def rounds_quit(self):
         self.rounds_box.destroy()
+    def rounds_go(self):
+        Math(1)
+        self.rounds_box.destroy()
+        
 
 
 class Math:
-    def __init__(self):
-         print("")
+    def __init__(self, mode):
+        # Creates new window
+        self.math_box = Toplevel()
+
+        # Top frame
+        self.math_frame = Frame(self.math_box)
+        self.math_frame.grid(padx=20, pady=20)
+
+        # Heading label (row 0)
+        self.heading_label = Label(self.math_frame, text="Heading", font='arial 24')
+        self.heading_label.grid(row=0)    
+
+        # Answer label (row 1)
+        self.answer_label = Label(self.math_frame, text="answer here", font='arial 15')
+        self.answer_label.grid(row=1)
+
+        # Question label (row 2)
+        self.question_label = Label(self.math_frame, text="Question here", font='arial 20')
+        self.question_label.grid(row=2)
+
+        # Error label (row 3)
+        self.error_label = Label(self.math_frame, text="error here", font='arial 13', fg="red")
+        self.error_label.grid(row=3)
+
+        # Answer entry (row 4)
+        self.answer_entry = Entry(self.math_frame, width=4)
+        self.answer_entry.grid(row=4)
+
+        # Buttons frame
+        self.buttons_frame = Frame(self.math_box)
+        self.buttons_frame.grid(padx=5, pady=5)
+
+        # Back button (row 0, column 0)
+        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
+        self.back_button.grid(row=0, column=0)
+        # Enter button (row 0, column 1)
+        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black')
+        self.enter_button.grid(row=0, column=1, padx=5)
+
+        # If the user is playing rounds mode, the UI will changed to Rounds.
+        if mode == 1:
+            print("Rounds")
+        # If the user isn't playing rounds, then they are playing unlimited mode.
+        else:
+            print("Unlimited")
+
 
 # Main Routine
 if __name__ == "__main__":
