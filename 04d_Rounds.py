@@ -158,7 +158,7 @@ class Rounds:
         self.rounds_box.destroy()
         
 
-
+# This is the Rounds and Unlimited mode EQUATIONS GUI. It is used for equations for either mode.
 class Math:
     def __init__(self, mode):
         # Creates new window
@@ -166,26 +166,26 @@ class Math:
 
         # Top frame
         self.math_frame = Frame(self.math_box)
-        self.math_frame.grid(padx=20, pady=20)
+        self.math_frame.grid(padx=30, pady=20)
 
         # Heading label (row 0)
         self.heading_label = Label(self.math_frame, text="Heading", font='arial 24')
         self.heading_label.grid(row=0)    
 
         # Answer label (row 1)
-        self.answer_label = Label(self.math_frame, text="answer here", font='arial 15')
+        self.answer_label = Label(self.math_frame, text="", font='arial 12 italic')
         self.answer_label.grid(row=1)
 
         # Question label (row 2)
-        self.question_label = Label(self.math_frame, text="Question here", font='arial 20')
+        self.question_label = Label(self.math_frame, text="Question here", font='arial 15')
         self.question_label.grid(row=2)
 
         # Error label (row 3)
-        self.error_label = Label(self.math_frame, text="error here", font='arial 13', fg="red")
+        self.error_label = Label(self.math_frame, text="", font='arial 13', fg="red")
         self.error_label.grid(row=3)
 
         # Answer entry (row 4)
-        self.answer_entry = Entry(self.math_frame, width=4)
+        self.answer_entry = Entry(self.math_frame, width=13)
         self.answer_entry.grid(row=4)
 
         # Buttons frame
@@ -201,11 +201,19 @@ class Math:
 
         # If the user is playing rounds mode, the UI will changed to Rounds.
         if mode == 1:
-            print("Rounds")
+            # All labels will change to cater for Rounds mode.
+            # Heading Label
+            self.heading_label.config(text="Rounds")
+            
         # If the user isn't playing rounds, then they are playing unlimited mode.
         else:
             print("Unlimited")
 
+
+# This class is used to generate equations for any mode.
+class Generate:
+    def __init__(self):
+        
 
 # Main Routine
 if __name__ == "__main__":
