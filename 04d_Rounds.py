@@ -1,5 +1,6 @@
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
+import random
 
 # This is the main GUI where the user selects their preferences and mode.
 class Start:
@@ -211,9 +212,17 @@ class Math:
 
 
 # This class is used to generate equations for any mode.
+# Parameters in order: Check which symbol user selected.
+# Min number and Max number, used to generate a equation within range.
+
 class Generate:
-    def __init__(self):
-        
+    def __init__(self, option, min, max):
+        symbols = ["+", "-", "*", "/"]
+        # Generate a question
+        a = random(range(min, max))
+        b = random(range(min, max))
+        answer = str("{}{}{}".format(a, symbols[option-1], b))
+        print(answer)
 
 # Main Routine
 if __name__ == "__main__":
