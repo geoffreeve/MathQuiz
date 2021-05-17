@@ -212,7 +212,6 @@ class Math:
 # This class is used to generate equations for any mode.
 # Parameters in order: 'Option' checks which symbol the user selected.
 # 'Min' number and 'Max' number, used to generate a equation within range.
-
 class Generate:
     def __init__(self, option, min, max):
         symbols = ["+", "-", "*", "/"]
