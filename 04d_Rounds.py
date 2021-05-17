@@ -3,6 +3,7 @@ from functools import partial  # To prevent unwanted windows
 import random
 
 # This is the main GUI where the user selects their preferences and mode.
+# When the user input is valid and they click a mode, it will call its class, which should be below.
 class Start:
     def __init__(self, error=""):
         # Heading frame
@@ -67,7 +68,8 @@ class Start:
         self.mode_label = Label(self.mode_frame, font='arial 16 bold', text="Modes:")
         self.mode_label.grid(row=2, pady=10)
         # Rounds button (row 3)
-        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Start.error_checking(self, self.min_entry.get(), self.max_entry.get(), 1))
+        
+        self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Start.error_checking(self, 1))
         self.rounds_button.grid(row=3, sticky="ew")
         # Unlimited button (row 4)
         self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10)
@@ -81,8 +83,11 @@ class Start:
         self.instructions_button.grid(row=6, pady=20)
 
     # This function is to check if the users entries (min/max num) are valid before going through with modes.
-    def error_checking(self, min, max, mode):
+    def error_checking(self, mode):
         try:
+            # This sets the minimum value and maximum value, based on what the user enters in the entry box.
+            min = self.min_entry.get()
+            max = self.max_entry.get()
             # Checks if the entry is blank. If it is, the user will get an error.
             if min == "" or max == "":
                 self.error_label.config(text="One or more entries are blank.")
@@ -102,15 +107,16 @@ class Start:
                 self.error_label.config(text="")
                 # If mode is 1, then the rounds class will be called.
                 if mode == 1:
-                    Rounds()
+                    Rounds(self.symbol_selection.get())
 
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
         
         
-# This is the rounds class which holds the rounds GUI if the user selects 'Rounds' in Start class
+# This is the rounds class which holds the Rounds GUI if the user selects 'Rounds' in Start class
+# It will ask the user how many rounds they want to play.
 class Rounds:
-    def __init__(self):
+    def __init__(self, symbol):
         # Creates new window called rounds_box
         self.rounds_box = Toplevel()
         # When this window is open, it disables any parent window until this one is closed.
@@ -147,19 +153,20 @@ class Rounds:
         self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_quit())
         self.back_button.grid(row=3, pady=10, padx=5)
         # Enter button (row 3, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_go())
+        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_go(symbol))
         self.enter_button.grid(row=3, column=1)
 
     def rounds_quit(self):
         self.rounds_box.destroy()
-    def rounds_go(self):
-        Math(1)
+    def rounds_go(self, symbol):
+        Math(1, symbol)
         self.rounds_box.destroy()
         
 
 # This is the Rounds and Unlimited mode EQUATIONS GUI. It is used for equations for either mode.
+# It will ask the user questions. This is the main quiz.
 class Math:
-    def __init__(self, mode):
+    def __init__(self, mode, symbol):
         # Creates new window
         self.math_box = Toplevel()
 
@@ -203,7 +210,8 @@ class Math:
             # All labels will change to cater for Rounds mode.
             # Heading Label
             self.heading_label.config(text="Rounds")
-            
+            question = Generate(symbol, 1, 10)
+            print(question)
         # If the user isn't playing rounds, then they are playing unlimited mode.
         else:
             print("Unlimited")
@@ -213,13 +221,15 @@ class Math:
 # Parameters in order: 'Option' checks which symbol the user selected.
 # 'Min' number and 'Max' number, used to generate a equation within range.
 class Generate:
-    def __init__(self, option, min, max):
-        symbols = ["+", "-", "*", "/"]
+    def __init__(self, symbol, min, max):
+        symbol_list = ["+", "-", "*", "/"]
         # Generate two numbers within range.
         a = random.randint(min, max)
         b = random.randint(min, max)
+        question = "{} {} {}".format(str(a, symbol_list[symbol-1], b))
+        return question
         # Eval function takes the string version of the equation and outputs a int once its added up. This output is assigned to 'answer' variable.
-        answer = eval("{}{}{}".format(a, symbols[option+1], b))
+        answer = eval("{}{}{}".format(a, symbol_list[symbol-1], b))
 
         
 
