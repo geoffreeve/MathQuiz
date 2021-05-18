@@ -210,7 +210,7 @@ class Math:
             # All labels will change to cater for Rounds mode.
             # Heading Label
             self.heading_label.config(text="Rounds")
-            question = Generate(symbol, 1, 10)
+            question = Generate.equation(symbol, 1, 10)
             print(question)
         # If the user isn't playing rounds, then they are playing unlimited mode.
         else:
@@ -221,12 +221,12 @@ class Math:
 # Parameters in order: 'Option' checks which symbol the user selected.
 # 'Min' number and 'Max' number, used to generate a equation within range.
 class Generate:
-    def __init__(self, symbol, min, max):
+    def equation(symbol, min, max):
         symbol_list = ["+", "-", "*", "/"]
         # Generate two numbers within range.
         a = random.randint(min, max)
         b = random.randint(min, max)
-        question = "{} {} {}".format(str(a, symbol_list[symbol-1], b))
+        question = "{} {} {} =".format(str(a), str(symbol_list[symbol-1]), str(b))
         return question
         # Eval function takes the string version of the equation and outputs a int once its added up. This output is assigned to 'answer' variable.
         answer = eval("{}{}{}".format(a, symbol_list[symbol-1], b))
