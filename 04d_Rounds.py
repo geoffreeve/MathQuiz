@@ -211,7 +211,11 @@ class Math:
             # Heading Label
             self.heading_label.config(text="Rounds")
             question = Generate.equation(symbol, 1, 10)
-            print(question)
+            print("question {}".format(question))
+            answer = question[:-1]
+            # Eval function takes the string in 'question' variable and outputs a int once its added up. This output is assigned to 'answer' variable.
+            answer = eval(answer)
+            print("Answer: {}".format(answer))
         # If the user isn't playing rounds, then they are playing unlimited mode.
         else:
             print("Unlimited")
@@ -228,8 +232,6 @@ class Generate:
         b = random.randint(min, max)
         question = "{} {} {} =".format(str(a), str(symbol_list[symbol-1]), str(b))
         return question
-        # Eval function takes the string version of the equation and outputs a int once its added up. This output is assigned to 'answer' variable.
-        answer = eval("{}{}{}".format(a, symbol_list[symbol-1], b))
 
         
 
