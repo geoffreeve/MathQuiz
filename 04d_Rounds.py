@@ -107,7 +107,7 @@ class Start:
                 self.error_label.config(text="")
                 # If mode is 1, then the rounds class will be called.
                 if mode == 1:
-                    Rounds(self.symbol_selection.get())
+                    Rounds(self.symbol_selection.get(), int(self.min_entry.get()), int(self.max_entry.get()))
 
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
@@ -116,7 +116,7 @@ class Start:
 # This is the rounds class which holds the Rounds GUI if the user selects 'Rounds' in Start class
 # It will ask the user how many rounds they want to play.
 class Rounds:
-    def __init__(self, symbol):
+    def __init__(self, symbol, min, max):
         # Creates new window called rounds_box
         self.rounds_box = Toplevel()
         # When this window is open, it disables any parent window until this one is closed.
@@ -127,7 +127,7 @@ class Rounds:
 
         # If the user presses the X to exit, this will call a function which destroys the window and
         # recalls the Selection class.
-        #self.rounds_box.protocol('WM_DELETE_WINDOW', self.close_rounds)
+        self.rounds_box.protocol('WM_DELETE_WINDOW', self.rounds_quit)
 
         # Main window frame
         self.rounds_frame = Frame(self.rounds_box, padx=20, pady=5)
@@ -153,20 +153,23 @@ class Rounds:
         self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_quit())
         self.back_button.grid(row=3, pady=10, padx=5)
         # Enter button (row 3, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_go(symbol))
+        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_go(symbol, min, max))
         self.enter_button.grid(row=3, column=1)
 
     def rounds_quit(self):
         self.rounds_box.destroy()
-    def rounds_go(self, symbol):
-        Math(1, symbol)
+    def rounds_go(self, symbol, min, max):
         self.rounds_box.destroy()
+        Math(1, symbol, min, max)
+        
         
 
 # This is the Rounds and Unlimited mode EQUATIONS GUI. It is used for equations for either mode.
 # It will ask the user questions. This is the main quiz.
 class Math:
-    def __init__(self, mode, symbol):
+    # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
+    # MIN, MAX- The minimum and maximum number range that the user entered in previous windows.
+    def __init__(self, mode, symbol, min, max):
         # Creates new window
         self.math_box = Toplevel()
 
@@ -210,27 +213,27 @@ class Math:
             # All labels will change to cater for Rounds mode.
             # Heading Label
             self.heading_label.config(text="Rounds")
-            question = Generate.equation(symbol, 1, 10)
+            question = Generate.equation(symbol, min, max)
             print("question {}".format(question))
             answer = question[:-1]
             # Eval function takes the string in 'question' variable and outputs a int once its added up. This output is assigned to 'answer' variable.
             answer = eval(answer)
-            print("Answer: {}".format(answer))
+            self.question_label.config(text=question)
         # If the user isn't playing rounds, then they are playing unlimited mode.
         else:
             print("Unlimited")
 
 
 # This class is used to generate equations for any mode.
-# Parameters in order: 'Option' checks which symbol the user selected.
-# 'Min' number and 'Max' number, used to generate a equation within range.
 class Generate:
+    # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
     def equation(symbol, min, max):
         symbol_list = ["+", "-", "*", "/"]
         # Generate two numbers within range.
         a = random.randint(min, max)
         b = random.randint(min, max)
-        question = "{} {} {} =".format(str(a), str(symbol_list[symbol-1]), str(b))
+        question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
+        print(question)
         return question
 
         
