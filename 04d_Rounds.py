@@ -240,6 +240,8 @@ class Generate:
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
         print(question)
         return question
+    def error_checking():
+        print("Error checking")
 
         
 
