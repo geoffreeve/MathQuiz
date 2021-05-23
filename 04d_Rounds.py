@@ -211,12 +211,17 @@ class Math:
         # If the user is playing rounds mode, the UI will changed to Rounds.
         if mode == 1:
             # All labels will change to cater for Rounds mode.
-            # Heading Label
+
+            # Change Heading Label
             self.heading_label.config(text="Rounds")
+            # Call Generate.equation function to generate a question and return it.
             question = Generate.equation(symbol, min, max)
-            print("question {}".format(question))
+            # 'Question' variable is a string that should print "x + y =",
+            # This line of code below assigns this string to 'answer', but removes the last item.
+            # 'x + y ='  ---> 'x + y'
             answer = question[:-1]
-            # Eval function takes the string in 'question' variable and outputs a int once its added up. This output is assigned to 'answer' variable.
+            # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
+            # The Eval function will add it up and assign its output to answer.
             answer = eval(answer)
             self.question_label.config(text=question)
         # If the user isn't playing rounds, then they are playing unlimited mode.
