@@ -163,7 +163,6 @@ class Rounds:
         Math(1, symbol, min, max)
         
         
-
 # This is the Rounds and Unlimited mode EQUATIONS GUI. It is used for equations for either mode.
 # It will ask the user questions. This is the main quiz.
 class Math:
@@ -205,7 +204,7 @@ class Math:
         self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black')
+        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Generate.error_checking(self.answer_entry.get()))
         self.enter_button.grid(row=0, column=1, padx=5)
 
         # If the user is playing rounds mode, the UI will changed to Rounds.
@@ -240,8 +239,20 @@ class Generate:
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
         print(question)
         return question
-    def error_checking():
-        print("Error checking")
+    # Check if users response to question is valid, then checks if it is correct or incorrect.
+    def error_checking(response):
+        try:
+            # Checks if response is blank.
+            if response == "":
+                print("Please enter a number.")
+                return
+            # The program will attempt to convert the response to a int. If it does not contain a number then it will cause an error
+            # Which will be caught in 'except'
+            int(response)
+            
+        except ValueError:
+            print("Please enter a valid number.")
+
 
         
 
