@@ -190,7 +190,7 @@ class Math:
         self.question_label.grid(row=2)
 
         # Answer label (row 1)
-        self.answer_label = Label(self.math_frame, text="", font='arial 12 italic')
+        self.answer_label = Label(self.math_frame, text="", font='arial 12 bold')
         self.answer_label.grid(row=3)
 
         # Answer entry (row 4)
@@ -243,9 +243,9 @@ class Math:
             # Checks if users response(answer) is equal to the program answer.
             if int(response) == int(answer):
                 # If it is, answer label will change to:
-                self.answer_label.config(text="Correct")
+                self.answer_label.config(text="Correct", fg='green')
             else:
-                self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer))
+                self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
 
