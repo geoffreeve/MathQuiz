@@ -3,7 +3,7 @@ from functools import partial  # To prevent unwanted windows
 import random
 
 # This is the main GUI where the user selects their preferences and mode.
-# When the user input is valid and they click a mode, it will call its class, which should be below.
+# If the users input is valid and they click a mode, it will call its class, which should be commented below.
 class Start:
     def __init__(self, error=""):
         # Heading frame
@@ -141,26 +141,43 @@ class Rounds:
         self.question_label = Label(self.rounds_frame, text="How many rounds?", font='arial 15 italic')
         self.question_label.grid(row=1, pady=10)
 
-        # Question entry (row 2)
+        # Hidden error label (row 2)
+        self.error_label = Label(self.rounds_frame, text="", font='arial 12', fg='red')
+        self.error_label.grid(row=2, pady=10)
+
+        # Question entry (row 3)
         self.question_entry = Entry(self.rounds_frame)
-        self.question_entry.grid(row=2)
+        self.question_entry.grid(row=3)
 
         # Buttons frame
         self.buttons_frame = Frame(self.rounds_box)
         self.buttons_frame.grid()
 
-        # Back button (row 3, column 0)
+        # Back button (row 4, column 0)
         self.back_button = Button(self.buttons_frame, text="Back", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_quit())
-        self.back_button.grid(row=3, pady=10, padx=5)
-        # Enter button (row 3, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_go(symbol, min, max))
-        self.enter_button.grid(row=3, column=1)
+        self.back_button.grid(row=4, pady=10, padx=5)
+        # Enter button (row 4, column 1)
+        self.enter_button = Button(self.buttons_frame, text="Enter", fg='white', bg='black', font='arial 12', command=lambda: self.rounds_go(symbol, min, max, self.question_entry.get()))
+        self.enter_button.grid(row=4, column=1)
 
+    # Used to exit rounds window. This is if the user decides they don't want to play rounds anymore.
     def rounds_quit(self):
         self.rounds_box.destroy()
-    def rounds_go(self, symbol, min, max):
-        self.rounds_box.destroy()
-        Math(1, symbol, min, max)
+    # This function will check if the user has entered a valid number for rounds. If they have then it will
+    # Call the 'Math' class which is where the game will begin.
+    def rounds_go(self, symbol, min, max, rounds):
+        try:
+            # If int(rounds) creates an error, this means the user did not enter a number.
+            rounds = int(rounds)
+            # Checks if the user entered a number higher than 0.
+            if rounds <= 0:
+                self.error_label.config(text="Please enter a number higher than 0")
+            # If the users input is valid, the rounds window will be destroyed and 'Math' class will be called.
+            else:
+                self.rounds_box.destroy()
+                Math(1, symbol, min, max)
+        except ValueError:
+            self.error_label.config(text="Please enter a valid number.")
         
         
 # This is the Rounds and Unlimited mode EQUATIONS GUI. It is used for equations for either mode.
@@ -168,7 +185,7 @@ class Rounds:
 class Math:
     # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
     # MIN, MAX- The minimum and maximum number range that the user entered in previous windows.
-    def __init__(self, mode, symbol, min, max):
+    def __init__(self, symbol, min, max, rounds):
         # Creates new window
         self.math_box = Toplevel()
 
@@ -202,7 +219,7 @@ class Math:
         self.buttons_frame.grid(padx=5, pady=5)
 
         # If the user is playing rounds mode, the UI will changed to Rounds.
-        if mode == 1:
+        if rounds > 0:
             # All labels will change to cater for Rounds mode.
 
             # Change Heading Label
@@ -246,7 +263,7 @@ class Math:
                 self.answer_label.config(text="Correct", fg='green')
             else:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
-                Generate.equations(symbol, min, max)
+                Generate.equation(symbol, min, max)
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
 
