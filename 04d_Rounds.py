@@ -225,12 +225,12 @@ class Math:
         self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Math.error_checking(self, self.answer_entry.get(), answer))
+        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Math.error_checking(self, self.answer_entry.get(), answer, symbol, min, max))
         self.enter_button.grid(row=0, column=1, padx=5)
 
        
     # Check if users response to question is valid, then checks if it is correct or incorrect.
-    def error_checking(self, response, answer):
+    def error_checking(self, response, answer, symbol, min, max):
         try:
             # Checks if response is blank.
             if response == "":
@@ -246,6 +246,7 @@ class Math:
                 self.answer_label.config(text="Correct", fg='green')
             else:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
+                Generate.equations(symbol, min, max)
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
 
