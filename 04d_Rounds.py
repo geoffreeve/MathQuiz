@@ -180,17 +180,18 @@ class Math:
         self.heading_label = Label(self.math_frame, text="Heading", font='arial 24')
         self.heading_label.grid(row=0)    
 
-        # Answer label (row 1)
-        self.answer_label = Label(self.math_frame, text="", font='arial 12 italic')
-        self.answer_label.grid(row=1)
+        
+        # Error label (row 3)
+        self.error_label = Label(self.math_frame, text="", font='arial 13', fg="red", wraplength=150)
+        self.error_label.grid(row=1)
 
         # Question label (row 2)
         self.question_label = Label(self.math_frame, text="Question here", font='arial 15')
         self.question_label.grid(row=2)
 
-        # Error label (row 3)
-        self.error_label = Label(self.math_frame, text="", font='arial 13', fg="red")
-        self.error_label.grid(row=3)
+        # Answer label (row 1)
+        self.answer_label = Label(self.math_frame, text="", font='arial 12 italic')
+        self.answer_label.grid(row=3)
 
         # Answer entry (row 4)
         self.answer_entry = Entry(self.math_frame, width=13)
@@ -199,13 +200,6 @@ class Math:
         # Buttons frame
         self.buttons_frame = Frame(self.math_box)
         self.buttons_frame.grid(padx=5, pady=5)
-
-        # Back button (row 0, column 0)
-        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
-        self.back_button.grid(row=0, column=0)
-        # Enter button (row 0, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Generate.error_checking(self.answer_entry.get()))
-        self.enter_button.grid(row=0, column=1, padx=5)
 
         # If the user is playing rounds mode, the UI will changed to Rounds.
         if mode == 1:
@@ -227,6 +221,34 @@ class Math:
         else:
             print("Unlimited")
 
+        # Back button (row 0, column 0)
+        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
+        self.back_button.grid(row=0, column=0)
+        # Enter button (row 0, column 1)
+        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Math.error_checking(self, self.answer_entry.get(), answer))
+        self.enter_button.grid(row=0, column=1, padx=5)
+
+       
+    # Check if users response to question is valid, then checks if it is correct or incorrect.
+    def error_checking(self, response, answer):
+        try:
+            # Checks if response is blank.
+            if response == "":
+                self.error_label.config(text="Please enter a number.")
+                return
+            # The program will attempt to convert the response to a int. If it does not contain a number then it will cause an error
+            # Which will be caught in 'except'
+            int(response)
+            self.error_label.config(text="")
+            # Checks if users response(answer) is equal to the program answer.
+            if int(response) == int(answer):
+                # If it is, answer label will change to:
+                self.answer_label.config(text="Correct")
+            else:
+                self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer))
+        except ValueError:
+            self.error_label.config(text="Please enter a valid number.")
+
 
 # This class is used to generate equations for any mode.
 class Generate:
@@ -237,21 +259,7 @@ class Generate:
         a = random.randint(min, max)
         b = random.randint(min, max)
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
-        print(question)
         return question
-    # Check if users response to question is valid, then checks if it is correct or incorrect.
-    def error_checking(response):
-        try:
-            # Checks if response is blank.
-            if response == "":
-                print("Please enter a number.")
-                return
-            # The program will attempt to convert the response to a int. If it does not contain a number then it will cause an error
-            # Which will be caught in 'except'
-            int(response)
-            
-        except ValueError:
-            print("Please enter a valid number.")
 
 
         
