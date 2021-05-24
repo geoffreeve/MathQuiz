@@ -95,13 +95,17 @@ class Start:
             # If min or max is a string, it will attempt to change to a int. This will be caught by the try except and will print an error.
             min = int(min)
             max = int(max)
+            # Checks if user has entered a min number higher than 0.
+            if min <= 0:
+                self.error_label.config(text="Enter a number higher than 0.")
+                return
             # Checks if minimum number is higher than max number. If it is then user will get an error.
             if min > max:
                 self.error_label.config(text="Min is higher than max, please enter a lower number")
                 return
             # Checks if user has selected a radiobutton symbol, if not then the user will get an error.
             if self.symbol_selection.get() == 0:
-                self.error_label.config(text="Please select a symbol.")
+                self.error_label.config(text="Select a symbol.")
             # If there are no problems, the error label will reset and the program will proceed.
             else:
                 self.error_label.config(text="")
@@ -139,10 +143,10 @@ class Rounds:
 
         # Question label (row 1)
         self.question_label = Label(self.rounds_frame, text="How many rounds?", font='arial 15 italic')
-        self.question_label.grid(row=1, pady=10)
+        self.question_label.grid(row=1)
 
         # Hidden error label (row 2)
-        self.error_label = Label(self.rounds_frame, text="", font='arial 12', fg='red')
+        self.error_label = Label(self.rounds_frame, text="", font='arial 12', fg='red', wraplength=150)
         self.error_label.grid(row=2, pady=10)
 
         # Question entry (row 3)
