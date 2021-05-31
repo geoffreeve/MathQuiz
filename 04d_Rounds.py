@@ -195,7 +195,7 @@ class Math:
 
         roundsB = IntVar()
         roundsB.set(roundsA)
-      #  print("Rounds: {}".format(rounds.get()))
+        #print("Rounds: {}".format(rounds.get()))
 
         # Top frame
         self.math_frame = Frame(self.math_box)
@@ -226,36 +226,48 @@ class Math:
         self.buttons_frame = Frame(self.math_box)
         self.buttons_frame.grid(padx=5, pady=5)
 
-        # If the user is playing rounds mode, the UI will changed to Rounds.
-        if roundsB.get() > 0:
-            # All labels will change to cater for Rounds mode.
-            print(roundsB.get())
-            # Change Heading Label
-            self.heading_label.config(text="Rounds")
-            # Call Generate.equation function to generate a question and return it.
-            question = generate(symbol, min, max)
-            # 'Question' variable is a string that should print "x + y =",
-            # This line of code below assigns this string to 'answer', but removes the last item.
-            # 'x + y ='  ---> 'x + y'
-            answer = question[:-1]
-            # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
-            # The Eval function will add it up and assign its output to answer.
-            answer = eval(answer)
-            self.question_label.config(text=question)
-        # If the user isn't playing rounds, then they are playing unlimited mode.
-        else:
-            print("Unlimited")
-
         # Back button (row 0, column 0)
         self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Math.error_checking(self, self.answer_entry.get(), answer, symbol, min, max))
         self.enter_button.grid(row=0, column=1, padx=5)
+        # Next button frame
+        self.next_frame = Frame(self.math_box)
+        self.next_frame.grid(pady=5)
         # Next button (row 5)
-        self.next_button = Button(self.buttons_frame, text="Next", fg='white', bg='black', font='arial 12', padx=20, command=lambda:generate(symbol, min, max))
+        self.next_button = Button(self.next_frame, text="Next", fg='white', bg='black', font='arial 12', padx=20, command=lambda:generate(symbol, min, max, mode))
         self.next_button.grid(row=5, sticky="ew")
+        
+        # If the user is playing rounds mode, the UI will changed to Rounds.
+        if roundsB.get() > 0:
+            Math.rounds(symbol, min, max, roundsB.get())
+        # If the user isn't playing rounds, then they are playing unlimited mode.
+        else:
+            Math.unlimited(symbol, min, max)
 
+    # Rounds function.   
+    def rounds(self, symbol, min, max, roundsB):
+        rounds = IntVar()
+        rounds.set(roundsB)
+        # All labels will change to cater for Rounds mode.
+        print(rounds.get())
+        # Change Heading Label
+        self.heading_label.config(text="Rounds")
+        # Call Generate.equation function to generate a question and return it.
+        question = generate(symbol, min, max)
+        # 'Question' variable is a string that should print "x + y =",
+        # This line of code below assigns this string to 'answer', but removes the last item.
+        # 'x + y ='  ---> 'x + y'
+        answer = question[:-1]
+        # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
+        # The Eval function will add it up and assign its output to answer.
+        answer = eval(answer)
+        self.question_label.config(text=question)
+        
+    # Unlimited function.
+    def unlimited(symbol, min, max):
+        print("Unlimited")
        
     # Check if users response to question is valid, then checks if it is correct or incorrect.
     def error_checking(self, response, answer, symbol, min, max):
@@ -282,7 +294,7 @@ class Math:
 
 # This class is used to generate equations for any mode.
 # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
-def generate(symbol, min, max):
+def generate(symbol, min, max, mode):
     symbol_list = ["+", "-", "*", "/"]
     # Generate two numbers within range.
     a = random.randint(min, max)
