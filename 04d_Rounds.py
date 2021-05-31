@@ -189,9 +189,13 @@ class Rounds:
 class Math:
     # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
     # MIN, MAX- The minimum and maximum number range that the user entered in previous windows.
-    def __init__(self, symbol, min, max, rounds):
+    def __init__(self, symbol, min, max, roundsA):
         # Creates new window
         self.math_box = Toplevel()
+
+        roundsB = IntVar()
+        roundsB.set(roundsA)
+      #  print("Rounds: {}".format(rounds.get()))
 
         # Top frame
         self.math_frame = Frame(self.math_box)
@@ -223,13 +227,13 @@ class Math:
         self.buttons_frame.grid(padx=5, pady=5)
 
         # If the user is playing rounds mode, the UI will changed to Rounds.
-        if rounds > 0:
+        if roundsB.get() > 0:
             # All labels will change to cater for Rounds mode.
-
+            print(roundsB.get())
             # Change Heading Label
             self.heading_label.config(text="Rounds")
             # Call Generate.equation function to generate a question and return it.
-            question = Generate.equation(symbol, min, max)
+            question = generate(symbol, min, max)
             # 'Question' variable is a string that should print "x + y =",
             # This line of code below assigns this string to 'answer', but removes the last item.
             # 'x + y ='  ---> 'x + y'
@@ -248,6 +252,9 @@ class Math:
         # Enter button (row 0, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Math.error_checking(self, self.answer_entry.get(), answer, symbol, min, max))
         self.enter_button.grid(row=0, column=1, padx=5)
+        # Next button (row 5)
+        self.next_button = Button(self.buttons_frame, text="Next", fg='white', bg='black', font='arial 12', padx=20, command=lambda:generate(symbol, min, max))
+        self.next_button.grid(row=5, sticky="ew")
 
        
     # Check if users response to question is valid, then checks if it is correct or incorrect.
@@ -265,23 +272,23 @@ class Math:
             if int(response) == int(answer):
                 # If it is, answer label will change to:
                 self.answer_label.config(text="Correct", fg='green')
+                
             else:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
-                Generate.equation(symbol, min, max)
-        except ValueError:
+                generate(symbol, min, max)
+        except ValueError: 
             self.error_label.config(text="Please enter a valid number.")
 
 
 # This class is used to generate equations for any mode.
-class Generate:
-    # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
-    def equation(symbol, min, max):
-        symbol_list = ["+", "-", "*", "/"]
-        # Generate two numbers within range.
-        a = random.randint(min, max)
-        b = random.randint(min, max)
-        question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
-        return question
+# Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
+def generate(symbol, min, max):
+    symbol_list = ["+", "-", "*", "/"]
+    # Generate two numbers within range.
+    a = random.randint(min, max)
+    b = random.randint(min, max)
+    question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
+    return question
 
 
         
