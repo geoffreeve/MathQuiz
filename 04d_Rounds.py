@@ -179,7 +179,7 @@ class Rounds:
             # If the users input is valid, the rounds window will be destroyed and 'Modes' class will be called.
             else:
                 self.rounds_box.destroy()
-                Modes.equations(symbol, min, max, 1, rounds)
+                Modes.equations(symbol, min, max, 1, rounds+1)
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
         
