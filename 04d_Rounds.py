@@ -189,7 +189,7 @@ class Rounds:
 class Modes:
     # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
     # MIN, MAX- The minimum and maximum number range that the user entered in previous windows.
-    def __init__(self, symbol, min, max, rounds, question):
+    def __init__(self, symbol, min, max, rounds, question, answer):
         # Creates new window
         self.Modes_box = Toplevel()
 
@@ -199,7 +199,7 @@ class Modes:
 
         # Heading label (row 0)
         self.heading_label = Label(self.Modes_frame, text="Heading", font='arial 24')
-        self.heading_label.grid(row=0)    
+        self.heading_label.grid(row=0)
 
         
         # Error label (row 3)
@@ -221,28 +221,12 @@ class Modes:
         # Buttons frame
         self.buttons_frame = Frame(self.Modes_box)
         self.buttons_frame.grid(padx=5, pady=5)
-
-        # If the user is playing rounds mode, the UI will changed to Rounds.
-        if rounds > 0:
-            # All labels will change to cater for Rounds mode.
-            # Change Heading Label
-            self.heading_label.config(text="Rounds: {}".format(rounds))
-            # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
-            # 'x + y ='  ---> 'x + y'
-            answer = question[:-1]
-            # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
-            # The Eval function will add it up and assign its output to answer.
-            answer = eval(answer)
-            self.question_label.config(text=question)
-        # If the user isn't playing rounds, then they are playing unlimited mode.
-        else:
-            print("Unlimited")
-
+    
         # Back button (row 0, column 0)
         self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), answer, symbol, min, max))
+        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), answer))
         self.enter_button.grid(row=0, column=1, padx=5)
         # Next button frame
         self.next_button_frame = Frame(self.Modes_box)
@@ -250,6 +234,17 @@ class Modes:
         # Next button (row 1)
         self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(symbol, min, max, 1, rounds))
         self.next_button.grid(row=1)
+
+        Modes.GUI(self)
+
+        
+    def GUI(self, rounds, question):
+        # All labels will change to cater for Rounds mode.
+        # Changes Heading Label to amount of rounds left.
+        self.heading_label.config(text="Rounds: {}".format(rounds))
+        # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
+        # 'x + y ='  ---> 'x + y'
+        self.question_label.config(text=question)
 
 
     # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
@@ -259,12 +254,17 @@ class Modes:
         a = random.randint(min, max)
         b = random.randint(min, max)
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
+        answer = question[:-1]
+        # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
+        # The Eval function will add it up and assign its output to answer.
+        answer = eval(answer)
         if mode == 1:
             rounds -= 1
-            Modes(symbol, min, max, rounds, question)
-       
+            Modes.GUI(rounds, question)
+            
+
     # Check if users response to question is valid, then checks if it is correct or incorrect.
-    def error_checking(self, response, answer, symbol, min, max):
+    def error_checking(self, response, answer):
         try:
             # Checks if response is blank.
             if response == "":
