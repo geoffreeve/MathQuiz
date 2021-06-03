@@ -225,11 +225,9 @@ class Modes:
         # If the user is playing rounds mode, the UI will changed to Rounds.
         if rounds > 0:
             # All labels will change to cater for Rounds mode.
-
             # Change Heading Label
             self.heading_label.config(text="Rounds: {}".format(rounds))
-            # 'Question' variable is a string that should print "x + y =",
-            # This line of code below assigns this string to 'answer', but removes the last item.
+            # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
             # 'x + y ='  ---> 'x + y'
             answer = question[:-1]
             # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
@@ -252,6 +250,7 @@ class Modes:
         # Next button (row 1)
         self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(symbol, min, max, 1, rounds))
         self.next_button.grid(row=1)
+
 
     # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
     def equations(symbol, min, max, mode, rounds):
@@ -283,13 +282,6 @@ class Modes:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
-
-
-
-
-
-
-
         
 
 # Main Routine
@@ -297,4 +289,5 @@ if __name__ == "__main__":
     root = Tk()
     root.title("Modes Program")
     something = Start()
+    root.resizable(False, False)
     root.mainloop()
