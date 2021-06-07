@@ -11,7 +11,7 @@ class Start:
         self.start_frame.grid()
 
         # Heading label (row 0)
-        self.heading_label = Label(self.start_frame, font='arial 24', text="Modes quiz")
+        self.heading_label = Label(self.start_frame, font='arial 24', text="Math quiz")
         self.heading_label.grid(row=0)
 
         # Hidden error label (row 0, Under Heading label)
@@ -179,7 +179,7 @@ class Rounds:
             # If the users input is valid, the rounds window will be destroyed and 'Modes' class will be called.
             else:
                 self.rounds_box.destroy()
-                Modes.equations(symbol, min, max, 1, rounds+1)
+                Modes(symbol, min, max, rounds+1, "", "")
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
         
@@ -232,10 +232,11 @@ class Modes:
         self.next_button_frame = Frame(self.Modes_box)
         self.next_button_frame.grid(pady=5)
         # Next button (row 1)
-        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(symbol, min, max, 1, rounds))
+        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max, 1, rounds))
         self.next_button.grid(row=1)
 
-        Modes.GUI(self)
+        Modes.GUI(self, rounds, "")
+        Modes.equations(self, symbol, min, max, 1, rounds)
 
         
     def GUI(self, rounds, question):
@@ -248,7 +249,7 @@ class Modes:
 
 
     # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
-    def equations(symbol, min, max, mode, rounds):
+    def equations(self, symbol, min, max, mode, rounds):
         symbol_list = ["+", "-", "*", "/"]
         # Generate two numbers within range.
         a = random.randint(min, max)
@@ -260,12 +261,13 @@ class Modes:
         answer = eval(answer)
         if mode == 1:
             rounds -= 1
-            Modes.GUI(rounds, question)
+            Modes.GUI(self, rounds, question)
             
 
     # Check if users response to question is valid, then checks if it is correct or incorrect.
     def error_checking(self, response, answer):
         try:
+            print("Here: {}".format(response))
             # Checks if response is blank.
             if response == "":
                 self.error_label.config(text="Please enter a number.")
