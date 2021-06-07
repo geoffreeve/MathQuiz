@@ -193,6 +193,8 @@ class Modes:
         # Creates new window
         self.Modes_box = Toplevel()
 
+        self.eqn_ans = IntVar()
+
         # Top frame
         self.Modes_frame = Frame(self.Modes_box)
         self.Modes_frame.grid(padx=30, pady=20)
@@ -226,7 +228,7 @@ class Modes:
         self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
-        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), answer))
+        self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), self.eqn_ans.get()))
         self.enter_button.grid(row=0, column=1, padx=5)
         # Next button frame
         self.next_button_frame = Frame(self.Modes_box)
@@ -259,6 +261,7 @@ class Modes:
         # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
+        self.eqn_ans.set(answer)
         if mode == 1:
             rounds -= 1
             Modes.GUI(self, rounds, question)
@@ -266,15 +269,17 @@ class Modes:
 
     # Check if users response to question is valid, then checks if it is correct or incorrect.
     def error_checking(self, response, answer):
+
+        print("answer", answer)
+        print("user answer", response)
+
         try:
-            print("Here: {}".format(response))
             # Checks if response is blank.
-            if response == "":
+            if str(response) == "":
                 self.error_label.config(text="Please enter a number.")
                 return
             # The program will attempt to convert the response to a int. If it does not contain a number then it will cause an error
             # Which will be caught in 'except'
-            int(response)
             self.error_label.config(text="")
             # Checks if users response(answer) is equal to the program answer.
             if int(response) == int(answer):
@@ -284,12 +289,13 @@ class Modes:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
+            raise
         
 
 # Main Routine
 if __name__ == "__main__":
     root = Tk()
-    root.title("Modes Program")
+    root.title("Math Program")
     something = Start()
     root.resizable(False, False)
     root.mainloop()
