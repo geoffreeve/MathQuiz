@@ -128,7 +128,6 @@ class Rounds:
         # This force forces on the child window so that the user can't interact with the entry box once this window has been opened.
         self.rounds_box.focus_force()
 
-
         # If the user presses the X to exit, this will call a function which destroys the window and
         # recalls the Selection class.
         self.rounds_box.protocol('WM_DELETE_WINDOW', self.rounds_quit)
@@ -179,7 +178,7 @@ class Rounds:
             # If the users input is valid, the rounds window will be destroyed and 'Modes' class will be called.
             else:
                 self.rounds_box.destroy()
-                Modes(symbol, min, max, rounds+1, "", "")
+                Modes(symbol, min, max, rounds+1)
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
         
@@ -189,11 +188,13 @@ class Rounds:
 class Modes:
     # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
     # MIN, MAX- The minimum and maximum number range that the user entered in previous windows.
-    def __init__(self, symbol, min, max, rounds, question, answer):
+    def __init__(self, symbol, min, max, rounds):
         # Creates new window
         self.Modes_box = Toplevel()
-
+        # Answer, Rounds 
         self.eqn_ans = IntVar()
+        self.rounds = IntVar()
+        self.rounds.set(rounds)
 
         # Top frame
         self.Modes_frame = Frame(self.Modes_box)
@@ -234,24 +235,24 @@ class Modes:
         self.next_button_frame = Frame(self.Modes_box)
         self.next_button_frame.grid(pady=5)
         # Next button (row 1)
-        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max, 1, rounds))
+        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max, 1))
         self.next_button.grid(row=1)
-
-        Modes.GUI(self, rounds, "")
-        Modes.equations(self, symbol, min, max, 1, rounds)
+        
+        Modes.equations(self, symbol, min, max, 1)
+        
 
         
-    def GUI(self, rounds, question):
+    def GUI(self, question):
         # All labels will change to cater for Rounds mode.
         # Changes Heading Label to amount of rounds left.
-        self.heading_label.config(text="Rounds: {}".format(rounds))
+        self.heading_label.config(text="Rounds: {}".format(self.rounds.get()))
         # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
         # 'x + y ='  ---> 'x + y'
         self.question_label.config(text=question)
 
 
     # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
-    def equations(self, symbol, min, max, mode, rounds):
+    def equations(self, symbol, min, max, mode):
         symbol_list = ["+", "-", "*", "/"]
         # Generate two numbers within range.
         a = random.randint(min, max)
@@ -263,16 +264,14 @@ class Modes:
         answer = eval(answer)
         self.eqn_ans.set(answer)
         if mode == 1:
-            rounds -= 1
-            Modes.GUI(self, rounds, question)
+            new_rounds = self.rounds.get()
+            new_rounds-=1
+            self.rounds.set(new_rounds)
+            Modes.GUI(self, question)
             
 
     # Check if users response to question is valid, then checks if it is correct or incorrect.
     def error_checking(self, response, answer):
-
-        print("answer", answer)
-        print("user answer", response)
-
         try:
             # Checks if response is blank.
             if str(response) == "":
@@ -282,7 +281,7 @@ class Modes:
             # Which will be caught in 'except'
             self.error_label.config(text="")
             # Checks if users response(answer) is equal to the program answer.
-            if int(response) == int(answer):
+            if int(response) == self.eqn_ans.get():
                 # If it is, answer label will change to:
                 self.answer_label.config(text="Correct", fg='green')
             else:
