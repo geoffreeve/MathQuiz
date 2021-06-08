@@ -194,7 +194,10 @@ class Modes:
         # Answer, Rounds 
         self.eqn_ans = IntVar()
         self.rounds = IntVar()
+        self.symbol = IntVar()
+    
         self.rounds.set(rounds)
+        self.symbol.set(symbol)
 
         # Top frame
         self.Modes_frame = Frame(self.Modes_box)
@@ -226,7 +229,7 @@ class Modes:
         self.buttons_frame.grid(padx=5, pady=5)
     
         # Back button (row 0, column 0)
-        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black')
+        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black', command=lambda:Modes.exit_rounds(self))
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), self.eqn_ans.get()))
@@ -241,7 +244,10 @@ class Modes:
         Modes.equations(self, symbol, min, max, 1)
         
 
-        
+    def exit_rounds(self):
+        self.Modes_box.destroy()
+
+
     def GUI(self, question):
         # All labels will change to cater for Rounds mode.
         # Changes Heading Label to amount of rounds left.
@@ -249,6 +255,7 @@ class Modes:
         # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
         # 'x + y ='  ---> 'x + y'
         self.question_label.config(text=question)
+        self.answer_label.config(text="")
 
 
     # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
@@ -267,6 +274,7 @@ class Modes:
             new_rounds = self.rounds.get()
             new_rounds-=1
             self.rounds.set(new_rounds)
+            self.answer_entry.delete(0, 'end')
             Modes.GUI(self, question)
             
 
