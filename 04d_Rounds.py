@@ -241,7 +241,7 @@ class Modes:
         self.next_button_frame = Frame(self.Modes_box)
         self.next_button_frame.grid(pady=5)
         # Next button (row 1)
-        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max, 1))
+        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max, mode))
         self.next_button.grid(row=1)
         
         Modes.equations(self, symbol, min, max, mode)
@@ -251,10 +251,13 @@ class Modes:
         self.Modes_box.destroy()
 
 
-    def GUI(self, question):
+    def GUI(self, question, mode):
         # All labels will change to cater for Rounds mode.
         # Changes Heading Label to amount of rounds left.
-        self.heading_label.config(text="Rounds: {}".format(self.rounds.get()))
+        if mode == 1:
+            self.heading_label.config(text="Rounds: {}".format(self.rounds.get()))
+        else:
+            self.heading_label.config(text="Unlimited")
         # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
         # 'x + y ='  ---> 'x + y'
         self.question_label.config(text=question)
@@ -274,14 +277,15 @@ class Modes:
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
         self.eqn_ans.set(answer)
+        self.answer_entry.config(state=NORMAL)
+        self.answer_entry.delete(0, 'end')
         if mode == 1:
             new_rounds = self.rounds.get()
             new_rounds-=1
             self.rounds.set(new_rounds)
-            self.answer_entry.delete(0, 'end')
-            Modes.GUI(self, question)
+            Modes.GUI(self, question, mode)
         else:
-            Modes.GUI(self, question)
+            Modes.GUI(self, question, mode)
             
 
     # Check if users response to question is valid, then checks if it is correct or incorrect.
@@ -294,6 +298,8 @@ class Modes:
             # The program will attempt to convert the response to a int. If it does not contain a number then it will cause an error
             # Which will be caught in 'except'
             self.error_label.config(text="")
+            # If there are no errors, the entry box will grey out so that the user cannot edit their answer.
+            self.answer_entry.config(state=DISABLED)
             # Checks if users response(answer) is equal to the program answer.
             if int(response) == self.eqn_ans.get():
                 # If it is, answer label will change to:
