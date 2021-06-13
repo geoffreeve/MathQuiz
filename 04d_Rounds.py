@@ -72,7 +72,7 @@ class Start:
         self.rounds_button = Button(self.mode_frame, font='arial 12 bold', text="Rounds", padx=10, command=lambda:Start.error_checking(self, 1))
         self.rounds_button.grid(row=3, sticky="ew")
         # Unlimited button (row 4)
-        self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10)
+        self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10, command=lambda:Start.error_checking(self, 2))
         self.unlimited_button.grid(row=4, pady=5, sticky="ew")
         # Rounds button (row 5)
         self.Timer_button = Button(self.mode_frame, font='arial 12 bold', text="Timer", padx=10)
@@ -112,6 +112,8 @@ class Start:
                 # If mode is 1, then the rounds class will be called.
                 if mode == 1:
                     Rounds(self.symbol_selection.get(), int(self.min_entry.get()), int(self.max_entry.get()))
+                elif mode == 2:
+                    Modes(self.symbol_selection.get(), int(self.min_entry.get()), int(self.max_entry.get()), 0, mode)
 
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
@@ -178,7 +180,7 @@ class Rounds:
             # If the users input is valid, the rounds window will be destroyed and 'Modes' class will be called.
             else:
                 self.rounds_box.destroy()
-                Modes(symbol, min, max, rounds+1)
+                Modes(symbol, min, max, rounds+1, 1)
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
         
@@ -188,13 +190,14 @@ class Rounds:
 class Modes:
     # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
     # MIN, MAX- The minimum and maximum number range that the user entered in previous windows.
-    def __init__(self, symbol, min, max, rounds):
+    def __init__(self, symbol, min, max, rounds, mode):
         # Creates new window
         self.Modes_box = Toplevel()
         # Answer, Rounds 
         self.eqn_ans = IntVar()
         self.rounds = IntVar()
         self.symbol = IntVar()
+        self.mode = IntVar()
     
         self.rounds.set(rounds)
         self.symbol.set(symbol)
@@ -241,7 +244,7 @@ class Modes:
         self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max, 1))
         self.next_button.grid(row=1)
         
-        Modes.equations(self, symbol, min, max, 1)
+        Modes.equations(self, symbol, min, max, mode)
         
 
     def exit_rounds(self):
@@ -266,6 +269,7 @@ class Modes:
         b = random.randint(min, max)
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
         answer = question[:-1]
+        
         # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
@@ -275,6 +279,8 @@ class Modes:
             new_rounds-=1
             self.rounds.set(new_rounds)
             self.answer_entry.delete(0, 'end')
+            Modes.GUI(self, question)
+        else:
             Modes.GUI(self, question)
             
 
