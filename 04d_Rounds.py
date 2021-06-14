@@ -2,8 +2,8 @@ from tkinter import *
 from functools import partial  # To prevent unwanted windows
 import random
 
-# This is the main GUI where the user selects their preferences and mode.
-# If the users input is valid and they click a mode, it will call its class, which should be commented below.
+# This is the main GUI where the user enters their prefered settings and mode.
+# If the users input is valid and they click a mode, it should go ahead with that specific mode.
 class Start:
     def __init__(self, error=""):
         # Heading frame
@@ -119,7 +119,7 @@ class Start:
             self.error_label.config(text="Please enter a valid number.")
         
         
-# This is the rounds class which holds the Rounds GUI if the user selects 'Rounds' in Start class
+# This Rounds class is a dedicated window for Rounds mode.
 # It will ask the user how many rounds they want to play.
 class Rounds:
     def __init__(self, symbol, min, max):
@@ -185,8 +185,8 @@ class Rounds:
             self.error_label.config(text="Please enter a valid number.")
         
         
-# This is the Rounds and Unlimited mode EQUATIONS GUI. It is used for equations for either mode.
-# It will ask the user questions. This is the main quiz.
+# This class is as a dedicated window to display the main quiz for UNLIMITED and ROUNDS mode.
+# It will ask the user questions depending on the settings the user previously set.
 class Modes:
     # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
     # MIN, MAX- The minimum and maximum number range that the user entered in previous windows.
@@ -255,6 +255,8 @@ class Modes:
         self.Modes_box.destroy()
 
     # This function changes the labels for Mode class, depending on which mode the user plays.
+    # (EXAMPLE: If user is playing rounds mode, the heading will change to rounds.
+    #  If user is playing unlimited mode, the heading will change to unlimited.)
     def GUI(self, question, mode):
         # If user selected rounds mode..
         if mode == 1:
@@ -278,6 +280,7 @@ class Modes:
 
 
     # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
+    # This function creates equation and returns them.
     def equations(self, symbol, min, max):
         symbol_list = ["+", "-", "*", "/"]
         # Generate two numbers within range.
