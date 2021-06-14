@@ -205,6 +205,7 @@ class Modes:
     
         self.rounds.set(rounds)
         self.symbol.set(symbol)
+        self.mode.set(mode)
 
         # Top frame
         self.Modes_frame = Frame(self.Modes_box)
@@ -245,27 +246,30 @@ class Modes:
         self.next_button_frame = Frame(self.Modes_box)
         self.next_button_frame.grid(pady=5)
         # Next button (row 1)
-        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max, mode))
+        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max))
         self.next_button.grid(row=1)
         
-        Modes.equations(self, symbol, min, max, mode)
+        Modes.equations(self, symbol, min, max)
 
     def exit_rounds(self):
         self.Modes_box.destroy()
 
-
+    # This function changes the labels for Mode class, depending on which mode the user plays.
     def GUI(self, question, mode):
-        # Changes heading to rounds + amount of rounds left.
+        # If user selected rounds mode..
         if mode == 1:
             # If user runs out of rounds..
             if self.rounds.get() == 0:
                 # Destroy the quiz window.
                 self.Modes_box.destroy()
+                return
             # If user hasn't run out of rounds..
-            else:    
+            else:
+                # Changes heading to rounds + amount of rounds left.    
                 self.heading_label.config(text="Rounds: {}".format(self.rounds.get()))
-        # Changes heading to Unlimited.
+        # If user selected unlimited mode..
         else:
+            # Changes heading to Unlimited
             self.heading_label.config(text="Unlimited")
         # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
         # 'x + y ='  ---> 'x + y'
@@ -274,7 +278,7 @@ class Modes:
 
 
     # Parameters: OPTION- Checks which symbol the user selected. || MIN, MAX- The minimum and maximum number range which was given by user in previous windows.
-    def equations(self, symbol, min, max, mode):
+    def equations(self, symbol, min, max):
         symbol_list = ["+", "-", "*", "/"]
         # Generate two numbers within range.
         a = random.randint(min, max)
@@ -288,13 +292,13 @@ class Modes:
         self.eqn_ans.set(answer)
         self.answer_entry.config(state=NORMAL)
         self.answer_entry.delete(0, 'end')
-        if mode == 1:
+        if self.mode.get() == 1:
             new_rounds = self.rounds.get()
             new_rounds-=1
             self.rounds.set(new_rounds)
-            Modes.GUI(self, question, mode)
+            Modes.GUI(self, question, self.mode.get())
         else:
-            Modes.GUI(self, question, mode)
+            Modes.GUI(self, question, self.mode.get())
             
 
     # Check if users response to question is valid, then checks if it is correct or incorrect.
