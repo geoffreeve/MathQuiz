@@ -193,6 +193,10 @@ class Modes:
     def __init__(self, symbol, min, max, rounds, mode):
         # Creates new window
         self.Modes_box = Toplevel()
+        # When this window is open, it disables any parent window until this one is closed.
+        self.Modes_box.grab_set()
+        # This force forces on the child window so that the user can't interact with the entry box once this window has been opened.
+        self.Modes_box.focus_force()
         # Answer, Rounds 
         self.eqn_ans = IntVar()
         self.rounds = IntVar()
@@ -245,17 +249,22 @@ class Modes:
         self.next_button.grid(row=1)
         
         Modes.equations(self, symbol, min, max, mode)
-        
 
     def exit_rounds(self):
         self.Modes_box.destroy()
 
 
     def GUI(self, question, mode):
-        # All labels will change to cater for Rounds mode.
-        # Changes Heading Label to amount of rounds left.
+        # Changes heading to rounds + amount of rounds left.
         if mode == 1:
-            self.heading_label.config(text="Rounds: {}".format(self.rounds.get()))
+            # If user runs out of rounds..
+            if self.rounds.get() == 0:
+                # Destroy the quiz window.
+                self.Modes_box.destroy()
+            # If user hasn't run out of rounds..
+            else:    
+                self.heading_label.config(text="Rounds: {}".format(self.rounds.get()))
+        # Changes heading to Unlimited.
         else:
             self.heading_label.config(text="Unlimited")
         # This line of code below assigns the 'question' string to 'answer', but removes the last item as shown below.
