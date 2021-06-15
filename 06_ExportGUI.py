@@ -198,12 +198,17 @@ class Modes:
         self.Modes_box.grab_set()
         # This force forces on the child window so that the user can't interact with the entry box once this window has been opened.
         self.Modes_box.focus_force()
-        # Answer, Rounds 
+
+        # These IntVar's hold relevant variables that are used and set through multiple different functions.
         self.eqn_ans = IntVar()
         self.rounds = IntVar()
         self.symbol = IntVar()
         self.mode = IntVar()
-    
+
+        self.question_arr = []
+        self.answer_arr = []
+        self.user_answer_arr = []
+        
         self.rounds.set(rounds)
         self.symbol.set(symbol)
         self.mode.set(mode)
@@ -265,7 +270,7 @@ class Modes:
             if self.rounds.get() == 0:
                 # Destroy the quiz window.
                 self.Modes_box.destroy()
-                Export([1,2,3])
+                Export(self.question_arr, self.user_answer_arr, self.answer_arr)
                 return
             # If user hasn't run out of rounds..
             else:
@@ -295,6 +300,10 @@ class Modes:
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
         self.eqn_ans.set(answer)
+        # Once a question and answer is generated, this is stored in the following arrays.
+        # This will be used in the Export class later.
+        self.question_arr.append(question)
+        self.answer_arr.append(answer)
         self.answer_entry.config(state=NORMAL)
         self.answer_entry.delete(0, 'end')
         if self.mode.get() == 1:
@@ -324,17 +333,19 @@ class Modes:
                 self.answer_label.config(text="Correct", fg='green')
             else:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
+            # This adds the users answer, whether correct or incorrect, into this array. 
+            # It will be used later in Export class.
+            self.answer_arr.append(response)
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
             raise
         
 
 class Export:
-    def __init__(self, calc_history):
+    def __init__(self, question, user_answer, answer):
 
         # Sets up child window (export box)
         self.export_box = Toplevel()
-
         # Setup GUI Frame
         self.export_frame = Frame(self.export_box, width=300)
         self.export_frame.grid()
@@ -379,14 +390,14 @@ class Export:
 
         # Save and Cancel Buttons (row 0 of save_cancel_frame)
         self.save_button = Button(self.save_cancel_frame, text="Save",
-                                  command=partial(lambda: self.save_history(calc_history)))
+                                  command=lambda: self.save_history(question, user_answer, answer))
         self.save_button.grid(row=0, column=0)
 
         self.cancel_button = Button(self.save_cancel_frame, text="Cancel",
                                     command=lambda:(self.export_quit()))
         self.cancel_button.grid(row=0, column=1)
 
-    def save_history(self, calc_history):
+    def save_history(self, question, user_answer, answer):
         # Regular expression to check filename is valid
         valid_char = "[A-Za-z0-9_]"
         has_error = 'no'
@@ -421,10 +432,12 @@ class Export:
             # Create file to hold data
             f = open(filename, "w+")
 
+            
             # Add new line at end of each item
-            for item in calc_history:
-                print("ITEM: {}".format(item))
-                f.write(str(item) + "\n")
+            for i in range(0, len(question)-1):
+                print(i)
+                f.write("Question: {} {} || Your Answer: {}\n".format(str(question[i], answer[i], user_answer[i])))
+
 
             # Close file
             f.close()
