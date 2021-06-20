@@ -336,7 +336,7 @@ class Modes:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
             # This adds the users answer, whether correct or incorrect, into this array. 
             # It will be used later in Export class.
-            self.answer_arr.append(response)
+            self.user_answer_arr.append(response)
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
             raise
@@ -430,11 +430,14 @@ class Export:
             filename = filename + ".txt"
 
             # Create file to hold data
+            print(filename)
             f = open(filename, "w+")
-
+            print(question)
             # Add new line at end of each item
-            for i in range(len(question)-1, 0):
-                print(len(question[i]))
+            for i in range(0, len(question)-1):
+                print("Question: {}".format(question))
+                print("Answer: {}".format(answer))
+                print("user-answer: {}".format(user_answer))
                 f.write("Question: {} {} || Your Answer: {}\n".format(question[i], answer[i], user_answer[i]))
             
             # Close file
