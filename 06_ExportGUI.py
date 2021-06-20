@@ -311,6 +311,7 @@ class Modes:
             new_rounds-=1
             self.rounds.set(new_rounds)
             Modes.GUI(self, question, self.mode.get())
+        # If mode is unlimited mode, call GUI function without changing any variables/labels.
         else:
             Modes.GUI(self, question, self.mode.get())
             
@@ -423,7 +424,6 @@ class Export:
             self.save_error_label.config(text="Invalid filename - {}".format(problem))
             # Change entry box background to pink
             self.filename_entry.config(bg="#ffafaf")
-            print()
         else:
             # If there are no errors, generate text file and then close dialogue
             # Add .txt suffix!
@@ -432,13 +432,11 @@ class Export:
             # Create file to hold data
             f = open(filename, "w+")
 
-            
             # Add new line at end of each item
-            for i in range(0, len(question)-1):
-                print(i)
-                f.write("Question: {} {} || Your Answer: {}\n".format(str(question[i], answer[i], user_answer[i])))
-
-
+            for i in range(len(question)-1, 0):
+                print(len(question[i]))
+                f.write("Question: {} {} || Your Answer: {}\n".format(question[i], answer[i], user_answer[i]))
+            
             # Close file
             f.close()
 
