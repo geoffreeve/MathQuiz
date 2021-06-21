@@ -295,7 +295,9 @@ class Modes:
         b = random.randint(min, max)
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
         answer = question[:-1]
-        
+        # If user clicks next without entering a number, this functions as a skip and will be added to game history.
+        if self.answer_entry.get() == "":
+            self.user_answer_arr.append("Skipped")
         # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
