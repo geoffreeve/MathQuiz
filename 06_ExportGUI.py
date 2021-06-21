@@ -243,7 +243,7 @@ class Modes:
         self.buttons_frame.grid(padx=5, pady=5)
     
         # Back button (row 0, column 0)
-        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black', command=lambda:Modes.exit_rounds(self))
+        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black', command=lambda:Modes.exit_modes(self))
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), self.eqn_ans.get()))
@@ -252,13 +252,22 @@ class Modes:
         self.next_button_frame = Frame(self.Modes_box)
         self.next_button_frame.grid(pady=5)
         # Next button (row 1)
-        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.equations(self, symbol, min, max))
+        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.next_func(self, symbol, min, max))
         self.next_button.grid(row=1)
         
         Modes.equations(self, symbol, min, max)
 
-    def exit_rounds(self):
+    # This function is used to exit the 'modes' GUI
+    def exit_modes(self):
         self.Modes_box.destroy()
+
+    # If the user presses the 'next' button without clicking enter, this will put a 'skip'
+    # to game history, which may be exported later.
+    def next_func(self, symbol, min, max):
+        if self.answer_entry.get() == "":
+            print("Answer here: {}".format(self.answer_entry.get()))
+            self.user_answer_arr.append("Skipped")
+        Modes.equations(self, symbol, min, max)
 
     # This function changes the labels for Mode class, depending on which mode the user plays.
     # (EXAMPLE: If user is playing rounds mode, the heading will change to rounds.
@@ -295,9 +304,7 @@ class Modes:
         b = random.randint(min, max)
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
         answer = question[:-1]
-        # If user clicks next without entering a number, this functions as a skip and will be added to game history.
-        if self.answer_entry.get() == "":
-            self.user_answer_arr.append("Skipped")
+
         # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
@@ -434,12 +441,13 @@ class Export:
             # Create file to hold data
             print(filename)
             f = open(filename, "w+")
-            print(question)
+
+            print("Question: {}".format(question))
+            print("Answer: {}".format(answer))
+            print("user-answer: {}".format(user_answer))
+
             # Add new line at end of each item
             for i in range(0, len(question)-1):
-                print("Question: {}".format(question))
-                print("Answer: {}".format(answer))
-                print("user-answer: {}".format(user_answer))
                 f.write("Question: {} {} || Your Answer: {}\n".format(question[i], answer[i], user_answer[i]))
             
             # Close file
