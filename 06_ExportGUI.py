@@ -3,7 +3,7 @@ from functools import partial  # To prevent unwanted windows
 import re
 import random
 
-# This is the main GUI where the user enters their prefered settings and mode.
+# This is the main GUI where the user enters their preferred settings and mode.
 # If the users input is valid and they click a mode, it should go ahead with that specific mode.
 class Start:
     def __init__(self, error=""):
@@ -120,7 +120,7 @@ class Start:
             self.error_label.config(text="Please enter a valid number.")
         
         
-# This Rounds class is a dedicated window for Rounds mode.
+# This Rounds class is a dedicated window for ROUNDS mode.
 # It will ask the user how many rounds they want to play.
 class Rounds:
     def __init__(self, symbol, min, max):
@@ -201,6 +201,7 @@ class Modes:
 
         # These IntVar's hold relevant variables that are used and set through multiple different functions.
         self.eqn_ans = IntVar()
+        self.question = StringVar()
         self.rounds = IntVar()
         self.symbol = IntVar()
         self.mode = IntVar()
@@ -267,10 +268,13 @@ class Modes:
         if self.answer_entry.get() == "":
             print("Answer here: {}".format(self.answer_entry.get()))
             self.user_answer_arr.append("Skipped")
+        else:
+            self.answer_arr.append(self.eqn_ans.get())
+            self.question_arr.append(self.question.get())
         Modes.equations(self, symbol, min, max)
 
     # This function changes the labels for Mode class, depending on which mode the user plays.
-    # (EXAMPLE: If user is playing rounds mode, the heading will change to rounds.
+    # (EXAMPLE: If user is playing rounds mode, the heading will change to rounds;
     #  If user is playing unlimited mode, the heading will change to unlimited.)
     def GUI(self, question, mode):
         # If user selected rounds mode..
@@ -304,15 +308,14 @@ class Modes:
         b = random.randint(min, max)
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
         answer = question[:-1]
-
         # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
         self.eqn_ans.set(answer)
         # Once a question and answer is generated, this is stored in the following arrays.
         # This will be used in the Export class later.
-        self.question_arr.append(question)
-        self.answer_arr.append(answer)
+        #self.question_arr.append(question)
+        #self.answer_arr.append(answer)
         self.answer_entry.config(state=NORMAL)
         self.answer_entry.delete(0, 'end')
         if self.mode.get() == 1:
@@ -332,8 +335,6 @@ class Modes:
             if str(response) == "":
                 self.error_label.config(text="Please enter a number.")
                 return
-            # The program will attempt to convert the response to a int. If it does not contain a number then it will cause an error
-            # Which will be caught in 'except'
             self.error_label.config(text="")
             # If there are no errors, the entry box will grey out so that the user cannot edit their answer.
             self.answer_entry.config(state=DISABLED)
@@ -346,11 +347,13 @@ class Modes:
             # This adds the users answer, whether correct or incorrect, into this array. 
             # It will be used later in Export class.
             self.user_answer_arr.append(response)
+            
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
             raise
         
 
+# Export class is used to export the users game history after they are done with a mode.
 class Export:
     def __init__(self, question, user_answer, answer):
 
