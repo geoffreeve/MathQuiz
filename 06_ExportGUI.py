@@ -270,7 +270,9 @@ class Modes:
             self.user_answer_arr.append("Skipped")
         else:
             self.answer_arr.append(self.eqn_ans.get())
-            self.question_arr.append(self.question.get())
+            print("Question here: {}".format(self.question.get()))
+        self.question_arr.append(self.question.get())
+        self.enter_button.config(state=NORMAL)
         Modes.equations(self, symbol, min, max)
 
     # This function changes the labels for Mode class, depending on which mode the user plays.
@@ -312,6 +314,7 @@ class Modes:
         # The Eval function will add it up and assign its output to answer.
         answer = eval(answer)
         self.eqn_ans.set(answer)
+        self.question.set(question)
         # Once a question and answer is generated, this is stored in the following arrays.
         # This will be used in the Export class later.
         #self.question_arr.append(question)
@@ -344,6 +347,7 @@ class Modes:
                 self.answer_label.config(text="Correct", fg='green')
             else:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
+            self.enter_button.config(state=DISABLED)
             # This adds the users answer, whether correct or incorrect, into this array. 
             # It will be used later in Export class.
             self.user_answer_arr.append(response)
