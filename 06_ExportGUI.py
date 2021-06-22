@@ -268,9 +268,7 @@ class Modes:
         if self.answer_entry.get() == "":
             print("Answer here: {}".format(self.answer_entry.get()))
             self.user_answer_arr.append("Skipped")
-        else:
-            self.answer_arr.append(self.eqn_ans.get())
-            print("Question here: {}".format(self.question.get()))
+        self.answer_arr.append(self.eqn_ans.get())
         self.question_arr.append(self.question.get())
         self.enter_button.config(state=NORMAL)
         Modes.equations(self, symbol, min, max)
@@ -454,7 +452,7 @@ class Export:
             print("user-answer: {}".format(user_answer))
 
             # Add new line at end of each item
-            for i in range(0, len(question)-1):
+            for i in range(0, len(question)):
                 f.write("Question: {} {} || Your Answer: {}\n".format(question[i], answer[i], user_answer[i]))
             
             # Close file
