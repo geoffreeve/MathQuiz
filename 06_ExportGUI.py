@@ -206,6 +206,7 @@ class Modes:
         self.symbol = IntVar()
         self.mode = IntVar()
 
+
         self.question_arr = []
         self.answer_arr = []
         self.user_answer_arr = []
@@ -244,7 +245,7 @@ class Modes:
         self.buttons_frame.grid(padx=5, pady=5)
     
         # Back button (row 0, column 0)
-        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black', command=lambda:Modes.exit_modes(self))
+        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black', command=lambda:Modes.exit_modes(self, mode))
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), self.eqn_ans.get()))
@@ -259,17 +260,23 @@ class Modes:
         Modes.equations(self, symbol, min, max)
 
     # This function is used to exit the 'modes' GUI
-    def exit_modes(self):
+    def exit_modes(self, mode):
+        # Open Export window if user exits unlimited mode with more than 1 round played.
+        if mode == 2:
+            if len(self.user_answer_arr) > 1:
+                Export(self.question_arr, self.user_answer_arr, self.answer_arr)
         self.Modes_box.destroy()
 
-    # If the user presses the 'next' button without clicking enter, this will put a 'skip'
-    # to game history, which may be exported later.
+    # This function is used for the next button. It will check for skips and add values to the game history.
     def next_func(self, symbol, min, max):
+        # If user entry is blank and they click next, the game history will record 'skipped'
         if self.answer_entry.get() == "":
             print("Answer here: {}".format(self.answer_entry.get()))
             self.user_answer_arr.append("Skipped")
+        # Appends the answer and question to game history.
         self.answer_arr.append(self.eqn_ans.get())
         self.question_arr.append(self.question.get())
+        # Reset Enter button to normal.
         self.enter_button.config(state=NORMAL)
         Modes.equations(self, symbol, min, max)
 
@@ -306,17 +313,21 @@ class Modes:
         # Generate two numbers within range.
         a = random.randint(min, max)
         b = random.randint(min, max)
+
+        # If user is playing with division, use the following code to prevent breaking.
+        if symbol == 4:
+            c = random.randint(min, max)
+            a = c * b
+
         question = "{} {} {} =".format(a, symbol_list[symbol-1], b)
         answer = question[:-1]
         # Eval function then takes the 'answer' string which should be "x + y" and converts and reads it as a int question
         # The Eval function will add it up and assign its output to answer.
-        answer = eval(answer)
+        answer = int(eval(answer))
         self.eqn_ans.set(answer)
         self.question.set(question)
         # Once a question and answer is generated, this is stored in the following arrays.
         # This will be used in the Export class later.
-        #self.question_arr.append(question)
-        #self.answer_arr.append(answer)
         self.answer_entry.config(state=NORMAL)
         self.answer_entry.delete(0, 'end')
         if self.mode.get() == 1:
