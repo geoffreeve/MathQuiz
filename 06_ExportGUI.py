@@ -271,6 +271,7 @@ class Modes:
     def next_func(self, symbol, min, max):
         # If user entry is blank and they click next, the game history will record 'skipped'
         if self.answer_entry.get() == "":
+            print("skiippped")
             print("Answer here: {}".format(self.answer_entry.get()))
             self.user_answer_arr.append("Skipped")
         # Appends the answer and question to game history.
@@ -348,14 +349,15 @@ class Modes:
                 self.error_label.config(text="Please enter a number.")
                 return
             self.error_label.config(text="")
-            # If there are no errors, the entry box will grey out so that the user cannot edit their answer.
-            self.answer_entry.config(state=DISABLED)
             # Checks if users response(answer) is equal to the program answer.
             if int(response) == self.eqn_ans.get():
                 # If it is, answer label will change to:
                 self.answer_label.config(text="Correct", fg='green')
             else:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
+            # If there are no errors, the entry box and enter button will grey out so that the user cannot edit their answer.
+            print("Here")
+            self.answer_entry.config(state=DISABLED)
             self.enter_button.config(state=DISABLED)
             # This adds the users answer, whether correct or incorrect, into this array. 
             # It will be used later in Export class.
@@ -363,7 +365,8 @@ class Modes:
             
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
-            raise
+            print("STILWORKINMG!!!!!!!!!!!!")
+            print(self.user_answer_arr)
         
 
 # Export class is used to export the users game history after they are done with a mode.
