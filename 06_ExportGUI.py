@@ -205,6 +205,7 @@ class Modes:
         self.rounds = IntVar()
         self.symbol = IntVar()
         self.mode = IntVar()
+        self.clicked_enter = BooleanVar()
 
 
         self.question_arr = []
@@ -254,7 +255,7 @@ class Modes:
         self.next_button_frame = Frame(self.Modes_box)
         self.next_button_frame.grid(pady=5)
         # Next button (row 1)
-        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.next_func(self, symbol, min, max))
+        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.next_func(self, symbol, min, max, ))
         self.next_button.grid(row=1)
         
         Modes.equations(self, symbol, min, max)
@@ -269,10 +270,9 @@ class Modes:
 
     # This function is used for the next button. It will check for skips and add values to the game history.
     def next_func(self, symbol, min, max):
-        # If user entry is blank and they click next, the game history will record 'skipped'
-        if self.answer_entry.get() == "":
-            print("skiippped")
-            print("Answer here: {}".format(self.answer_entry.get()))
+        # If the 'clicked_enter' boolean is set to False (they didn't click enter), then the game history will record 'skipped' in game history.
+        print(self.clicked_enter.get())
+        if self.clicked_enter.get() == False:
             self.user_answer_arr.append("Skipped")
         # Appends the answer and question to game history.
         self.answer_arr.append(self.eqn_ans.get())
@@ -315,6 +315,9 @@ class Modes:
         a = random.randint(min, max)
         b = random.randint(min, max)
 
+        # Resets the 'clicked_enter' boolean to False.
+        self.clicked_enter.set(False)
+
         # If user is playing with division, use the following code to prevent breaking.
         if symbol == 4:
             c = random.randint(min, max)
@@ -355,6 +358,8 @@ class Modes:
                 self.answer_label.config(text="Correct", fg='green')
             else:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
+            # This boolean is set to true because the users input was valid when they clicked the 'enter' button.
+            self.clicked_enter.set(True)
             # If there are no errors, the entry box and enter button will grey out so that the user cannot edit their answer.
             print("Here")
             self.answer_entry.config(state=DISABLED)
@@ -365,7 +370,6 @@ class Modes:
             
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
-            print("STILWORKINMG!!!!!!!!!!!!")
             print(self.user_answer_arr)
         
 

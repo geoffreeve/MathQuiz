@@ -1,3 +1,5 @@
+Question: 4 + 5 = 9 || Your Answer: Skipped
+Question: 4 + 5 = 9 || Your Answer: Skipped
+Question: 4 + 3 = 7 || Your Answer: Skipped
 Question: 5 + 5 = 10 || Your Answer: Skipped
-Question: 2 + 5 = 7 || Your Answer: 45
-Question: 2 + 3 = 5 || Your Answer: 4
+Question: 3 + 3 = 6 || Your Answer: Skipped
