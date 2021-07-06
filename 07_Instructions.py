@@ -80,8 +80,12 @@ class Start:
         self.Timer_button.grid(row=5, sticky="ew")
 
         # Instructions button (row 6)
-        self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5)
+        self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5, command=self.help)
         self.instructions_button.grid(row=6, pady=20)
+    
+    def help(self):
+        Help()
+
 
     # This function is to check if the users entries (min/max num) are valid before going through with modes.
     def error_checking(self, mode):
@@ -370,7 +374,7 @@ class Modes:
             self.error_label.config(text="Please enter a valid number.")
         
 
-# Export class is used to export the users game history after they are done with a mode.
+# Export class is used to export the users game history on a separate window after they are done with a mode.
 class Export:
     def __init__(self, question, user_answer, answer):
 
@@ -479,6 +483,44 @@ class Export:
     def export_quit(self):
         self.export_box.destroy()
 
+
+# Help class holds the instructions on how to play the quiz.
+class Help:
+    def __init__(self):
+
+        # Sets up child window (help box)
+        self.help_box = Toplevel()
+
+        # Setup GUI Frame
+        self.help_frame = Frame(self.help_box)
+        self.help_frame.grid()
+
+        # Setup Help heading (row 0)
+        self.how_heading = Label(self.help_box, text="Help / Instructions",
+                                 font="arial 10 bold")
+        self.how_heading.grid(row=0)
+
+        # Help text (label, row 1)
+        self.help_text = Label(self.help_box, text="Please enter a number in the box "
+                                          "and then push one of the buttons "
+                                          "to convert the number to either "
+                                          "degrees C or degrees F.\n\n"
+                                          "The Calculation History area shows "
+                                          "up to seven past calculations"
+                                          "(most recent at the top). \n\n You can "
+                                          "also export your full calculation "
+                                          "history to a text file if desired.",
+                               justify=LEFT, width=40, wrap=250)
+        self.help_text.grid(column=0, row=1)
+
+        # Dismiss button (row 2)
+        self.dismiss_btn = Button(self.help_box, text="Dismiss", width=10,
+                                  font="arial 10 bold",
+                                  command=partial(self.close_help))
+        self.dismiss_btn.grid(row=2, pady=10)
+
+    def close_help(self):
+        self.help_box.destroy()
 
 # Main Routine
 if __name__ == "__main__":
