@@ -78,6 +78,7 @@ class Start:
         # Rounds button (row 5)
         self.Timer_button = Button(self.mode_frame, font='arial 12 bold', text="Timer", padx=10)
         self.Timer_button.grid(row=5, sticky="ew")
+        self.Timer_button.config(state=DISABLED)
 
         # Instructions button (row 6)
         self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5, command=self.help)
@@ -491,6 +492,14 @@ class Help:
         # Sets up child window (help box)
         self.help_box = Toplevel()
 
+        # When this window is open, it disables any parent window until this one is closed.
+        self.help_box.grab_set()
+        # This force forces on the child window so that the user can't interact with the entry box once this window has been opened.
+        self.help_box.focus_force()
+
+        # This IntVar holds the help windows page number.
+        self.page_number = IntVar()
+
         # Setup GUI Frame
         self.help_frame = Frame(self.help_box)
         self.help_frame.grid()
@@ -498,26 +507,45 @@ class Help:
         # Setup Help heading (row 0)
         self.how_heading = Label(self.help_box, text="Help / Instructions",
                                  font="arial 10 bold")
-        self.how_heading.grid(row=0)
+        self.how_heading.grid(row=0, padx=5, pady=5)
 
         # Help text (label, row 1)
-        self.help_text = Label(self.help_box, text="Please enter a number in the box "
-                                          "and then push one of the buttons "
-                                          "to convert the number to either "
-                                          "degrees C or degrees F.\n\n"
-                                          "The Calculation History area shows "
-                                          "up to seven past calculations"
-                                          "(most recent at the top). \n\n You can "
-                                          "also export your full calculation "
-                                          "history to a text file if desired.",
+        self.help_text = Label(self.help_box, text="",
                                justify=LEFT, width=40, wrap=250)
         self.help_text.grid(column=0, row=1)
 
-        # Dismiss button (row 2)
-        self.dismiss_btn = Button(self.help_box, text="Dismiss", width=10,
+        # Buttons frame
+        self.buttons_frame = Frame(self.help_box)
+        self.buttons_frame.grid()
+
+        # Dismiss button (row 2, column 0)
+        self.dismiss_btn = Button(self.buttons_frame, text="Dismiss", width=10,
                                   font="arial 10 bold",
                                   command=partial(self.close_help))
-        self.dismiss_btn.grid(row=2, pady=10)
+        self.dismiss_btn.grid(row=2, column=0, pady=10)
+
+        # Back button (row 2, column 1)
+        self.back_button = Button(self.buttons_frame, text="Back", width=10, font='arial 10 bold', command=self.page(2))
+        self.back_button.grid(row=2, column=1)
+
+        # Next button (row 2, column 2)
+        self.next_button = Button(self.buttons_frame, text="Next", width=10, font="arial 10 bold", command=self.page(1))
+        self.next_button.grid(row=2, column=2)
+
+    # This function is used to change pages on the instructions window.
+    def page(self, button_check):
+        # If user clicks next, go to next page.
+        if button_check == 1:
+            page_num += 1
+        # If user clicks back, go back a page.
+        else:
+            page_num -= 1
+        # Page 1
+        if page_num == 1:
+            self.help_text.config(text="How to play - \n\nStart by entering a minimum and maximum number. This will ensure the quiz does not generate numbers under or over these parameters."
+        "\n\nThen choose a symbol and select a mode.\n\nWhen you select a mode, this will automatically prompt you to a new window.")
+        elif page_num == 2:
+            self.help_text.config(text="page 2")
 
     def close_help(self):
         self.help_box.destroy()
