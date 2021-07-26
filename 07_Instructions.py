@@ -75,10 +75,6 @@ class Start:
         # Unlimited button (row 4)
         self.unlimited_button = Button(self.mode_frame, font='arial 12 bold', text="Unlimited", padx=10, command=lambda:Start.error_checking(self, 2))
         self.unlimited_button.grid(row=4, pady=5, sticky="ew")
-        # Rounds button (row 5)
-        self.Timer_button = Button(self.mode_frame, font='arial 12 bold', text="Timer", padx=10)
-        self.Timer_button.grid(row=5, sticky="ew")
-        self.Timer_button.config(state=DISABLED)
 
         # Instructions button (row 6)
         self.instructions_button = Button(self.mode_frame, font='arial 12 bold', text="Help/Instructions", padx=5, command=self.help)
@@ -191,7 +187,7 @@ class Rounds:
             self.error_label.config(text="Please enter a valid number.")
         
         
-# This class is as a dedicated window to display the main quiz for UNLIMITED and ROUNDS mode.
+# This class is as a individual window to display the main quiz for UNLIMITED and ROUNDS mode.
 # It will ask the user questions depending on the settings the user previously set.
 class Modes:
     # Parameters: MODE- Check if user is playing rounds or unlimited mode. || SYMBOL- Its the symbol which the user selected in previous windows (+ - / *) ||
@@ -212,7 +208,7 @@ class Modes:
         self.mode = IntVar()
         self.clicked_enter = BooleanVar()
 
-
+        # These arrays are used to hold game data which the user can later export.
         self.question_arr = []
         self.answer_arr = []
         self.user_answer_arr = []
