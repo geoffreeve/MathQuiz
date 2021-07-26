@@ -499,18 +499,20 @@ class Help:
 
         # This IntVar holds the help windows page number.
         self.page_number = IntVar()
+        self.page_number.set(1)
 
         # Setup GUI Frame
         self.help_frame = Frame(self.help_box)
         self.help_frame.grid()
 
         # Setup Help heading (row 0)
-        self.how_heading = Label(self.help_box, text="Help / Instructions",
+        self.how_heading = Label(self.help_box, text="Help / Instructions (Page 1)",
                                  font="arial 10 bold")
         self.how_heading.grid(row=0, padx=5, pady=5)
 
         # Help text (label, row 1)
-        self.help_text = Label(self.help_box, text="",
+        self.help_text = Label(self.help_box, text="How to play - \n\nStart by entering a minimum and maximum number. This will ensure the quiz does not generate numbers under or over these parameters."
+        "\n\nThen choose a symbol and select a mode.\n\nWhen you select a mode, this will automatically prompt you to a new window.",
                                justify=LEFT, width=40, wrap=250)
         self.help_text.grid(column=0, row=1)
 
@@ -525,28 +527,55 @@ class Help:
         self.dismiss_btn.grid(row=2, column=0, pady=10)
 
         # Back button (row 2, column 1)
-        self.back_button = Button(self.buttons_frame, text="Back", width=10, font='arial 10 bold', command=self.page(2))
+        self.back_button = Button(self.buttons_frame, text="Back", width=10, font='arial 10 bold', command=lambda:self.page(2))
         self.back_button.grid(row=2, column=1)
+        # On initial start, back button is disabled as the user is already on page 1.
+        self.back_button.config(state=DISABLED)
 
         # Next button (row 2, column 2)
-        self.next_button = Button(self.buttons_frame, text="Next", width=10, font="arial 10 bold", command=self.page(1))
+        self.next_button = Button(self.buttons_frame, text="Next", width=10, font="arial 10 bold", command=lambda:self.page(1))
         self.next_button.grid(row=2, column=2)
 
     # This function is used to change pages on the instructions window.
     def page(self, button_check):
         # If user clicks next, go to next page.
-        if button_check == 1:
-            page_num += 1
+        if button_check == 1 and self.page_number.get() < 5:
+            self.page_number.set(self.page_number.get()+1)
         # If user clicks back, go back a page.
-        else:
-            page_num -= 1
-        # Page 1
-        if page_num == 1:
-            self.help_text.config(text="How to play - \n\nStart by entering a minimum and maximum number. This will ensure the quiz does not generate numbers under or over these parameters."
-        "\n\nThen choose a symbol and select a mode.\n\nWhen you select a mode, this will automatically prompt you to a new window.")
-        elif page_num == 2:
-            self.help_text.config(text="page 2")
+        elif button_check == 2 and self.page_number.get() > 1:
+            self.page_number.set(self.page_number.get()-1)
 
+        # Change page number
+        self.how_heading.config(text="Help / Instructions (Page {})".format(self.page_number.get()))
+
+        # Page 1 (Menu)
+        if self.page_number.get() == 1:
+            self.help_text.config(text="How to play - \n\nStart by entering a minimum and maximum number. This will ensure the quiz does not generate numbers under or over these parameters."
+            "\n\nThen choose a symbol and select a mode.\n\nWhen you select a mode, this will automatically prompt you to a new window.")
+            # When the user is at the first page, disable/grey out the back button.
+            self.back_button.config(state=DISABLED)
+        # Page 2 (Rounds mode)
+        elif self.page_number.get() == 2:
+            self.help_text.config(text="Rounds Mode - \n\nRounds mode will prompt you with a window asking for how many rounds you would like to play. Enter a valid amount of rounds and click next."
+            "\n\nIf you want to go back at any time while using this mode, either click the X on the top-right of the window, or the 'Back' button.")
+            # Re-enable back button.
+            self.back_button.config(state=NORMAL)
+        # Page 3 (Unlimited mode)
+        elif self.page_number.get() == 3:
+            self.help_text.config(text="Unlimited Mode - \n\nUnlimited mode will function the same as Rounds mode, but will generate an unlimited amount of questions until you decide to exit."
+            "\n\nIf you want to go back at any time while using this mode, either click the X on the top-right of the window, or the 'Back' button")
+        # Page 4 (Exporting rounds)
+        elif self.page_number.get() == 4:
+            self.help_text.config(text="Exporting your game data (Rounds) - \n\nWhen you run out of rounds you will be prompted with a Export window which will give you the option to export your game data."
+            "\n\nTo do so, enter a valid file name and click 'Export'. This will generate a txt file in the programs directory which will contain your game data.")
+            # Re-enable the next button.
+            self.next_button.config(state=NORMAL)
+        # Page 5 (Exporting unlimited)
+        elif self.page_number.get() == 5:
+            self.help_text.config(text="Exporting your game data (Unlimited) - \n\nWhen you decide to exit unlimited mode, if you have answered more than 1 question, a window will popup, asking if you would like to export your game data."
+            "\n\nTo do so, enter a valid file name and click 'Export'. This will generate a txt file in the programs directory which will contain your game data.")
+            # When the user is at the last page, disable/grey out the next button.
+            self.next_button.config(state=DISABLED)
     def close_help(self):
         self.help_box.destroy()
 
