@@ -247,7 +247,7 @@ class Modes:
         self.buttons_frame.grid(padx=5, pady=5)
     
         # Back button (row 0, column 0)
-        self.back_button = Button(self.buttons_frame, text="Back", font='arial 12', fg='white', bg='black', command=lambda:Modes.exit_modes(self, mode))
+        self.back_button = Button(self.buttons_frame, text="Exit", font='arial 12', fg='white', bg='black', padx=9, command=lambda:Modes.exit_modes(self, mode))
         self.back_button.grid(row=0, column=0)
         # Enter button (row 0, column 1)
         self.enter_button = Button(self.buttons_frame, text="Enter", font='arial 12', fg='white', bg='black', command=lambda:Modes.error_checking(self, self.answer_entry.get(), self.eqn_ans.get()))
@@ -256,7 +256,7 @@ class Modes:
         self.next_button_frame = Frame(self.Modes_box)
         self.next_button_frame.grid(pady=5)
         # Next button (row 1)
-        self.next_button = Button(self.next_button_frame, text="Next", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.next_func(self, symbol, min, max, ))
+        self.next_button = Button(self.next_button_frame, text="Skip", font='arial 12', fg='white', bg='black', padx=10, command=lambda:Modes.next_func(self, symbol, min, max, ))
         self.next_button.grid(row=1)
         
         Modes.equations(self, symbol, min, max)
@@ -276,6 +276,8 @@ class Modes:
             self.user_answer_arr.append("Skipped")
             self.answer_arr.append(self.eqn_ans.get())  
             self.question_arr.append(self.question.get())
+        # Reset Next button to 'Skip'
+        self.next_button.config(text="Skip")
         # Reset Enter button to normal.
         self.enter_button.config(state=NORMAL)
         Modes.equations(self, symbol, min, max)
@@ -359,6 +361,8 @@ class Modes:
                 self.answer_label.config(text="Incorrect.\nAnswer: {}".format(answer), fg='red')
             # This boolean is set to true because the users input was valid when they clicked the 'enter' button.
             self.clicked_enter.set(True)
+            # This changes the 'Skip' button to 'Next'.
+            self.next_button.config(text='Next')
             # If there are no errors, the entry box and enter button will grey out so that the user cannot edit their answer.
             self.answer_entry.config(state=DISABLED)
             self.enter_button.config(state=DISABLED)
