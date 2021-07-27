@@ -1,4 +1,0 @@
-Question: 4 + 4 = 8 || Your Answer: 8
-Question: 1 + 4 = 5 || Your Answer: Skipped
-Question: 3 + 3 = 6 || Your Answer: 6
-Question: 5 + 4 = 9 || Your Answer: 9
