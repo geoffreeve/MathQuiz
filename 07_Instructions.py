@@ -274,9 +274,8 @@ class Modes:
         # If the 'clicked_enter' boolean is False (they didn't click enter), then the game history will record 'skipped' in game history.
         if self.clicked_enter.get() == False:
             self.user_answer_arr.append("Skipped")
-        # Appends the answer and question to game history.
-        self.answer_arr.append(self.eqn_ans.get())
-        self.question_arr.append(self.question.get())
+            self.answer_arr.append(self.eqn_ans.get())  
+            self.question_arr.append(self.question.get())
         # Reset Enter button to normal.
         self.enter_button.config(state=NORMAL)
         Modes.equations(self, symbol, min, max)
@@ -363,9 +362,10 @@ class Modes:
             # If there are no errors, the entry box and enter button will grey out so that the user cannot edit their answer.
             self.answer_entry.config(state=DISABLED)
             self.enter_button.config(state=DISABLED)
-            # This adds the users answer, whether correct or incorrect, into this array. 
-            # It will be used later in Export class.
+            # This adds the users answer to a array which will be used later in Export class
             self.user_answer_arr.append(response)
+            self.answer_arr.append(self.eqn_ans.get())  
+            self.question_arr.append(self.question.get())
             
         except ValueError:
             self.error_label.config(text="Please enter a valid number.")
