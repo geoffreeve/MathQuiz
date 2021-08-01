@@ -467,14 +467,22 @@ class Export:
             print(filename)
             f = open(filename, "w+")
 
-            print("Question: {}".format(question))
-            print("Answer: {}".format(answer))
-            print("user-answer: {}".format(user_answer))
+            # Ratio holds the number of questions the user got correct.
+            ratio = 0
 
             # Add new line at end of each item
             for i in range(0, len(question)):
                 f.write("Question: {} {} || Your Answer: {}\n".format(question[i], answer[i], user_answer[i]))
-            
+                # If user skipped question then continue
+                if user_answer[i] == "Skipped":
+                    continue
+                # Else check if users answer is same as actual answer..
+                elif int(user_answer[i]) == int(answer[i]):
+                    # If yes, then ratio int += 1
+                    ratio += 1
+            # Adds line that shows the users overall score out of the amount of questions the user answered.
+            f.write("\nYou got {}/{} questions correct.".format(ratio, len(question)))
+                    
             # Close file
             f.close()
 
