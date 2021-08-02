@@ -280,6 +280,8 @@ class Modes:
         self.next_button.config(text="Skip")
         # Reset Enter button to normal.
         self.enter_button.config(state=NORMAL)
+        # Reset error label
+        self.error_label.config(text="")
         Modes.equations(self, symbol, min, max)
 
     # This function changes the labels for Mode class, depending on which mode the user plays.
